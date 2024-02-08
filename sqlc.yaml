@@ -1,0 +1,18 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "db/sqlc/"
+    schema: "db/migrations/"
+    database:
+      uri: postgresql://postgres:password@localhost:5432/gin-boilerplate
+    gen:
+      go:
+        package: "db"
+        out: "internal/db"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_empty_slices: true
+        emit_db_tags: true
+        overrides:
+          - column: "auth_users.hashed_password"
+            go_struct_tag: 'json:"-"'

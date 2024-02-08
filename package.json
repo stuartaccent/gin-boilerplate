@@ -1,0 +1,14 @@
+{
+  "name": "gin.go.dev",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "private": true,
+  "devDependencies": {
+    "htmx.org": "^1.9.10",
+    "tailwindcss": "^3.4.1"
+  },
+  "scripts": {
+    "css": "npx tailwindcss -i static/css/main.css -o ./static/css/main.min.css --watch --minify"
+  }
+}
