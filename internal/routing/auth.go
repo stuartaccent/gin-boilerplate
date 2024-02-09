@@ -19,8 +19,8 @@ func init() {
 
 // LoginCredentials used in the login validation
 type LoginCredentials struct {
-	Email    string `form:"email" validate:"required,email"`
-	Password string `form:"password" validate:"required,min=6"`
+	Email    string `form:"email" binding:"required,email"`
+	Password string `form:"password" binding:"required,min=6"`
 }
 
 // AuthRouter route handler.
@@ -57,12 +57,7 @@ func (r *AuthRouter) login(c *gin.Context) {
 	}
 
 	var credentials LoginCredentials
-	if err := c.Bind(&credentials); err != nil {
-		invalid()
-		return
-	}
-
-	if err := cc.Validator.Validate(credentials); err != nil {
+	if err := c.ShouldBind(&credentials); err != nil {
 		invalid()
 		return
 	}

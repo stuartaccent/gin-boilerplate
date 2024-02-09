@@ -11,24 +11,21 @@ import (
 // such as Queries and Session.
 type CustomContext struct {
 	*gin.Context
-	Postgres  *pgxpool.Pool
-	Queries   *db.Queries
-	Session   sessions.Session
-	Validator *CustomValidator
+	Postgres *pgxpool.Pool
+	Queries  *db.Queries
+	Session  sessions.Session
 }
 
 // NewCustomContext gin handler to create a new CustomContext.
 func NewCustomContext(dbPool *pgxpool.Pool) gin.HandlerFunc {
-	validator := NewCustomValidator()
 	queries := db.New(dbPool)
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		cc := &CustomContext{
-			Context:   c,
-			Postgres:  dbPool,
-			Queries:   queries,
-			Session:   session,
-			Validator: validator,
+			Context:  c,
+			Postgres: dbPool,
+			Queries:  queries,
+			Session:  session,
 		}
 		c.Set("custom", cc)
 		c.Next()
