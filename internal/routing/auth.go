@@ -69,7 +69,7 @@ func (r *AuthRouter) login(c *gin.Context) {
 
 	email := strings.ToLower(credentials.Email)
 	user, err := cc.Queries.GetUserByEmail(c.Request.Context(), email)
-	if err != nil {
+	if err != nil || !user.IsActive {
 		invalid()
 		return
 	}
