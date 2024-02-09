@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	csrf "github.com/utrack/gin-csrf"
+	"golang.org/x/time/rate"
 	"log"
 	"net/http"
 	"strings"
@@ -31,7 +32,7 @@ func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
 	r := AuthRouter{}
 	g := e.Group("/auth")
 	g.GET("/login", csrf, r.loginForm)
-	g.POST("/login", csrf, webx.ContentTypes("application/x-www-form-urlencoded"), r.login)
+	g.POST("/login", webx.RateLimiter(rate.Limit(2), 5), webx.ContentTypes("application/x-www-form-urlencoded"), csrf, r.login)
 	g.GET("/logout", r.logout)
 	g.GET("/user-menu", webx.CurrentUser(), r.userMenu)
 }
