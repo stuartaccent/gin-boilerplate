@@ -13,7 +13,7 @@ type MainRouter struct {
 // NewMainRouter create a new MainRouter.
 func NewMainRouter(e *gin.Engine) {
 	r := MainRouter{}
-	g := e.Group("/", webx.CurrentUser())
+	g := e.Group("/", webx.Authenticated())
 	g.GET("/", r.index)
 }
 

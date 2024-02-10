@@ -8,6 +8,27 @@ import (
 	"sync"
 )
 
+// Authenticated middleware func to ensure logged in, redirects to log-in if not.
+// This calls CurrentUser first, so you don't need to chain both.
+func Authenticated() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if _, exists := c.Get("user"); !exists {
+			CurrentUser()(c)
+		}
+
+		if _, exists := c.Get("user"); !exists {
+			htmx := &HTMXHelper{Request: c.Request, Response: c.Writer}
+			if htmx.IsHTMXRequest() {
+				htmx.SetRedirect("/auth/login")
+				c.Status(http.StatusNoContent)
+			} else {
+				c.Redirect(http.StatusFound, "/auth/login")
+			}
+			c.Abort()
+		}
+	}
+}
+
 // ContentTypes blocks requests with invalid Content-Type headers.
 func ContentTypes(allowedTypes ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -29,40 +50,23 @@ func ContentTypes(allowedTypes ...string) gin.HandlerFunc {
 	}
 }
 
-// CurrentUser middleware func to get the current active user, redirects to login if not.
+// CurrentUser middleware func to set the current active user.
 func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cc := c.MustGet("custom").(*CustomContext)
 
-		getHTMX := func() *HTMXHelper {
-			return &HTMXHelper{Request: c.Request, Response: c.Writer}
-		}
-
-		redirect := func() {
-			if htmx := getHTMX(); htmx.IsHTMXRequest() {
-				htmx.SetRedirect("/auth/login")
-				c.Status(http.StatusNoContent)
-			} else {
-				c.Redirect(http.StatusFound, "/auth/login")
-			}
-			c.Abort()
-		}
-
 		userID, ok := cc.Session.Get("user_id").([16]byte)
 		if !ok {
-			redirect()
 			return
 		}
 
 		userUUID := pgtype.UUID{Bytes: userID, Valid: true}
 		user, err := cc.Queries.GetUserByID(c.Request.Context(), userUUID)
 		if err != nil || !user.IsActive {
-			redirect()
 			return
 		}
 
 		c.Set("user", user)
-		c.Next()
 	}
 }
 

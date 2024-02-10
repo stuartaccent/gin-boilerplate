@@ -34,7 +34,7 @@ func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
 	g.GET("/login", csrf, r.loginForm)
 	g.POST("/login", webx.RateLimiter(rate.Limit(2), 5), webx.ContentTypes("application/x-www-form-urlencoded"), csrf, r.login)
 	g.GET("/logout", r.logout)
-	g.GET("/user-menu", webx.CurrentUser(), r.userMenu)
+	g.GET("/user-menu", webx.Authenticated(), r.userMenu)
 }
 
 // loginForm get the login form
