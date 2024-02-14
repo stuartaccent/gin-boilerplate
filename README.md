@@ -60,7 +60,6 @@ go run cmd/cli/cli.go
 usage:
 ```bash
 go run cmd/cli/cli.go createuser -help
-go run cmd/cli/cli.go hexauthkey -help
 ```
 ```bash
 go run cmd/cli/cli.go createuser \

@@ -2,15 +2,12 @@ package main
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/hex"
 	"flag"
 	"fmt"
 	"gin.go.dev/internal/config"
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/webx"
 	"github.com/jackc/pgx/v5"
-	"io"
 	"os"
 )
 
@@ -20,7 +17,6 @@ func main() {
 		fmt.Println("")
 		fmt.Println("Available commands:")
 		fmt.Println("  createuser")
-		fmt.Println("  hexauthkey")
 		os.Exit(1)
 	}
 
@@ -73,25 +69,6 @@ func main() {
 
 		createUser(cfg, *createEmail, *createPassword, *createFName, *createLName)
 
-	case "hexauthkey":
-		hexAuthKeyCmd := flag.NewFlagSet("hexauthkey", flag.ExitOnError)
-		hexAuthKeyCmdLength := hexAuthKeyCmd.Int("length", 0, "The length of the random key.")
-		hexAuthKeyHelp := hexAuthKeyCmd.Bool("help", false, "Display help for the hexauthkey command")
-
-		hexAuthKeyCmd.Parse(os.Args[2:])
-
-		if *hexAuthKeyHelp {
-			hexAuthKeyCmd.Usage()
-			return
-		}
-
-		if *hexAuthKeyCmdLength == 0 {
-			fmt.Println("The -length flag is required.")
-			flag.Usage()
-			os.Exit(1)
-		}
-		hexAuthKey(*hexAuthKeyCmdLength)
-
 	default:
 		fmt.Printf("Unknown command: %s\n", os.Args[1])
 		os.Exit(1)
@@ -136,13 +113,4 @@ func createUser(cfg *config.Config, email, password, firstName, lastName string)
 	}
 
 	fmt.Printf("User created!: %v\n", user.Email)
-}
-
-func hexAuthKey(length int) {
-	k := make([]byte, length)
-	if _, err := io.ReadFull(rand.Reader, k); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Printf("Random key: %s\n", hex.EncodeToString(k))
 }
