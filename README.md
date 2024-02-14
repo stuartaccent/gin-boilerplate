@@ -4,11 +4,16 @@
 * Manage the queries in `db/sqlc`.
 * Generated query directory `internal/db`.
 
-### Install Tools
+### Install Go Tools
 ```bash
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+```
+```bash
 go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 ```
+
+### Config
+For configuration see the `config.toml` passed in as the `-app-config` flag to server and cli commands.
 
 ### Generate SQL Helpers
 make sure to use the correct db dsn in `sqlc.yml` and that the db is fully migrated.
@@ -18,9 +23,7 @@ sqlc generate
 
 ### Run Server
 ```bash
-go run cmd/server/server.go \
--db-dns "postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable" \
--port 80
+go run cmd/server/server.go
 ```
 
 ### Build Server
@@ -61,7 +64,6 @@ go run cmd/cli/cli.go hexauthkey -help
 ```
 ```bash
 go run cmd/cli/cli.go createuser \
--db "postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable" \
 -email admin@example.com \
 -password password \
 -firstname Admin \
@@ -81,17 +83,16 @@ npm run css
 ### Docker
 build:
 ```bash
-docker build -t gin-boilerplate-go:latest .
+docker build -t wip-go:latest .
 ```
 run:
 ```bash
 docker run \
 --rm \
---name gin-boilerplate-go \
+--name wip-go \
 --publish "80:80" \
-gin-boilerplate-go:latest \
--db-dns "postgres://postgres:password@host.docker.internal:5432/gin-boilerplate?sslmode=disable" \
--port 80
+wip-go:latest \
+-app-config config.toml
 ```
 cli:
 ```bash

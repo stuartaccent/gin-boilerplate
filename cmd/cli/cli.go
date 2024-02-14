@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
+	"gin.go.dev/internal/config"
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/webx"
 	"github.com/jackc/pgx/v5"
@@ -26,7 +27,7 @@ func main() {
 	switch os.Args[1] {
 	case "createuser":
 		createCmd := flag.NewFlagSet("createuser", flag.ExitOnError)
-		createDb := createCmd.String("db", "", "The database DNS: eg: postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable")
+		createConfig := createCmd.String("app-config", "config.toml", "The path of the app config eg: config.toml")
 		createEmail := createCmd.String("email", "", "The email address of the user")
 		createPassword := createCmd.String("password", "", "The password of the user")
 		createFName := createCmd.String("firstname", "", "The first name of the user")
@@ -39,8 +40,8 @@ func main() {
 			createCmd.Usage()
 			return
 		}
-		if *createDb == "" {
-			fmt.Println("The -db flag is required.")
+		if *createConfig == "" {
+			fmt.Println("The -app-config flag is required.")
 			flag.Usage()
 			os.Exit(1)
 		}
@@ -65,7 +66,12 @@ func main() {
 			os.Exit(1)
 		}
 
-		createUser(*createDb, *createEmail, *createPassword, *createFName, *createLName)
+		cfg, err := config.NewConfigFromPath(*createConfig)
+		if err != nil {
+			panic(err)
+		}
+
+		createUser(cfg, *createEmail, *createPassword, *createFName, *createLName)
 
 	case "hexauthkey":
 		hexAuthKeyCmd := flag.NewFlagSet("hexauthkey", flag.ExitOnError)
@@ -92,10 +98,18 @@ func main() {
 	}
 }
 
-func createUser(dns, email, password, firstName, lastName string) {
+func createUser(cfg *config.Config, email, password, firstName, lastName string) {
 	ctx := context.Background()
 
-	conn, err := pgx.Connect(ctx, dns)
+	conn, err := pgx.Connect(ctx, fmt.Sprintf(
+		"host=%s port=%v user=%s password=%s database=%s sslmode=%s",
+		cfg.Database.Host,
+		cfg.Database.Port,
+		cfg.Database.User,
+		cfg.Database.Password,
+		cfg.Database.Database,
+		cfg.Database.Sslmode,
+	))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
