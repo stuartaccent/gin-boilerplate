@@ -1,7 +1,6 @@
 [server]
 port = 80
-# mode: "release", "debug", "test"
-mode = "debug"
+mode = "debug"  # mode: "release", "debug", "test"
 
 [database]
 host = "localhost"
@@ -9,12 +8,11 @@ port = 5432
 user = "postgres"
 password = "password"
 database = "gin-boilerplate"
-# sslmode: "disable", "allow", "prefer", "require"
-sslmode = "disable"
+sslmode = "disable"  # sslmode: "disable", "allow", "prefer", "require"
 
 [security]
-allowed_hosts = ["localhost"]
-sts_seconds = 30758400
+allowed_hosts = []
+sts_seconds = 31536000
 sts_include_subdomains = true
 frame_deny = true
 content_type_nosniff = true
@@ -23,14 +21,11 @@ content_security_policy = "default-src 'self'"
 csrf_secret = "some_secret_key"
 
 [session]
-# key: hex encoded 32 byte string
-key = "13d45bf0a822b832cc8886fa41ce4ced30584189bad02ec8ce552ace0d1ae8b1"
-# enc_key: hex encoded 16 byte string
-enc_key = "2bb61a68ac3dec4f7c25efb062f4ae3b"
+key = "13d45bf0a822b832cc8886fa41ce4ced30584189bad02ec8ce552ace0d1ae8b1"  # key: hex encoded 32 byte string
+enc_key = "2bb61a68ac3dec4f7c25efb062f4ae3b"  # enc_key: hex encoded 16 byte string
 path = "/"
 domain = ""
 max_age = 2592000
 secure = false
 http_only = true
-# same_site: Default = 1, Lax = 2, Strict = 3, None = 4
-same_site = 1
+same_site = 2  # same_site: Default = 1, Lax = 2, Strict = 3, None = 4

@@ -25,16 +25,55 @@ type Config struct {
 	Session  SessionConfig  `toml:"session"`
 }
 
+// DefaultConfig creates a Config instance populated with default values.
+func DefaultConfig() *Config {
+	return &Config{
+		Server: ServerConfig{
+			Port: 80,
+			Mode: gin.ReleaseMode,
+		},
+		Database: DatabaseConfig{
+			Host:     "localhost",
+			Port:     5432,
+			User:     "postgres",
+			Password: "password",
+			Database: "db",
+			Sslmode:  SslModeDisable,
+		},
+		Security: SecurityConfig{
+			AllowedHosts:          []string{},
+			StsSeconds:            86400 * 365,
+			StsIncludeSubdomains:  true,
+			FrameDeny:             true,
+			ContentTypeNosniff:    true,
+			BrowserXSSFilter:      true,
+			ContentSecurityPolicy: "default-src 'self'",
+			CsrfSecret:            "some_secret_key",
+		},
+		Session: SessionConfig{
+			Key:      "13d45bf0a822b832cc8886fa41ce4ced30584189bad02ec8ce552ace0d1ae8b1",
+			EncKey:   "2bb61a68ac3dec4f7c25efb062f4ae3b",
+			Path:     "/",
+			Domain:   "",
+			MaxAge:   86400 * 30,
+			Secure:   false,
+			HttpOnly: true,
+			SameSite: http.SameSiteLaxMode,
+		},
+	}
+}
+
 // NewConfigFromPath creates and validates a new Config from a .toml file.
+// Uses a set of default values from DefaultConfig.
 func NewConfigFromPath(path string) (*Config, error) {
-	var config Config
-	if _, err := toml.DecodeFile(path, &config); err != nil {
+	config := DefaultConfig()
+	if _, err := toml.DecodeFile(path, config); err != nil {
 		return nil, err
 	}
 	if err := config.validate(); err != nil {
 		return nil, err
 	}
-	return &config, nil
+	return config, nil
 }
 
 // ServerConfig represents the server configuration.
