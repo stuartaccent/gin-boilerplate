@@ -4,11 +4,6 @@
 * Manage the queries in `db/sqlc`.
 * Generated query directory `internal/db`.
 
-> [!TIP]
-> When you want new session auth keys in the config ask [ChatGPT](https://chat.openai.com)
-> 
-> "Could you generate random hex keys of 32 bytes and 16 bytes for me?"
-
 ### Install Go Tools
 ```bash
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
@@ -19,6 +14,11 @@ go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 
 ### Config
 For configuration see the `config.toml` passed in as the `-app-config` flag to server and cli commands.
+
+> [!TIP]
+> Generate new session auth keys ask [ChatGPT](https://chat.openai.com)
+> 
+> "Could you generate random hex keys of 32 bytes and 16 bytes for me?"
 
 ### Generate SQL Helpers
 make sure to use the correct db dsn in `sqlc.yml` and that the db is fully migrated.
