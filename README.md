@@ -4,6 +4,11 @@
 * Manage the queries in `db/sqlc`.
 * Generated query directory `internal/db`.
 
+> [!TIP]
+> When you want new session auth keys in the config ask [ChatGPT](https://chat.openai.com)
+> 
+> "Could you generate random hex keys of 32 bytes and 16 bytes for me?"
+
 ### Install Go Tools
 ```bash
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
