@@ -36,7 +36,7 @@ func main() {
 	// parse the config file
 	cfg, err := config.NewConfigFromPath(*appConfig)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Invalid config: %v", err)
 	}
 
 	// set up the db pool
@@ -46,8 +46,8 @@ func main() {
 		cfg.Database.Port,
 		cfg.Database.User,
 		cfg.Database.Password,
-		cfg.Database.Database,
-		cfg.Database.Sslmode,
+		cfg.Database.Db,
+		cfg.Database.SslMode,
 	))
 	if err != nil {
 		log.Fatalf("Unable to create connection pool: %v\n", err)
@@ -55,7 +55,7 @@ func main() {
 	defer dbPool.Close()
 
 	// set up gin mode
-	gin.SetMode(cfg.Server.Mode)
+	gin.SetMode(cfg.Server.Mode.ToGinMode())
 
 	// create new engine
 	g := gin.Default()

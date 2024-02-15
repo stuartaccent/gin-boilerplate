@@ -7,8 +7,8 @@ host = "localhost"
 port = 5432
 user = "postgres"
 password = "password"
-database = "gin-boilerplate"
-sslmode = "disable"  # "disable", "allow", "prefer", "require"
+db = "gin-boilerplate"
+ssl_mode = "disable"  # "disable", "allow", "prefer", "require"
 
 [security]
 allowed_hosts = []

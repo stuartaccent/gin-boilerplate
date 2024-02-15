@@ -84,8 +84,8 @@ func createUser(cfg *config.Config, email, password, firstName, lastName string)
 		cfg.Database.Port,
 		cfg.Database.User,
 		cfg.Database.Password,
-		cfg.Database.Database,
-		cfg.Database.Sslmode,
+		cfg.Database.Db,
+		cfg.Database.SslMode,
 	))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
