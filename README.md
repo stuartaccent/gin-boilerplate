@@ -95,6 +95,8 @@ docker run \
 --rm \
 --name wip-go \
 --publish "80:80" \
+--env "DATABASE_HOST=host.docker.internal" \
+--env "SERVER_MODE=release" \
 wip-go:latest \
 -app-config config.toml
 ```
