@@ -13,4 +13,19 @@ create table auth_users
     updated_at      timestamp with time zone default clock_timestamp()
 );
 
+create or replace function set_updated_at()
+    returns trigger as
+$$
+begin
+    NEW.updated_at = clock_timestamp();
+    return NEW;
+end;
+$$ language plpgsql;
+
+create trigger set_updated_at
+    before update
+    on auth_users
+    for each row
+execute procedure set_updated_at();
+
 commit;
