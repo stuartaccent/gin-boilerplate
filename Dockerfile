@@ -3,8 +3,7 @@ WORKDIR /app
 COPY . .
 ENV CGO_ENABLED=0
 RUN go mod tidy
-RUN go build cmd/cli/cli.go
-RUN go build cmd/server/server.go
+RUN go build -o . ./...
 
 FROM scratch
 WORKDIR /app

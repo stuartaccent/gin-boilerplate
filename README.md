@@ -28,12 +28,12 @@ sqlc generate
 
 ### Run Server
 ```bash
-go run cmd/server/server.go
+go run cmd/server/main.go
 ```
 
 ### Build Server
 ```bash
-go build cmd/server/server.go
+go build -o server cmd/server/main.go
 ```
 
 ### Migrations
@@ -59,15 +59,15 @@ migrate -source file://db/migrations \
 ### CLI
 list commands:
 ```bash
-go run cmd/cli/cli.go
+go run cmd/cli/main.go
 ```
 
 usage:
 ```bash
-go run cmd/cli/cli.go createuser -help
+go run cmd/cli/main.go createuser -help
 ```
 ```bash
-go run cmd/cli/cli.go createuser \
+go run cmd/cli/main.go createuser \
 -email admin@example.com \
 -password password \
 -firstname Admin \
