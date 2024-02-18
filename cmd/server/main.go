@@ -18,7 +18,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
 var (
@@ -97,11 +96,15 @@ func main() {
 	// custom context middleware
 	g.Use(webx.NewCustomContext(dbPool))
 
+	// templates
+	templates, err := webx.GetTemplates()
+	if err != nil {
+		log.Fatalf("Unable to load templates: %v", err)
+	}
+	g.SetHTMLTemplate(templates)
+
 	// static
 	g.Static("/static", "./static")
-
-	// html
-	g.LoadHTMLFiles(getTemplates()...)
 
 	// routes
 	routing.NewMainRouter(g)
@@ -127,21 +130,4 @@ func decodeHex(hexStr string) []byte {
 		log.Fatal(err)
 	}
 	return decoded
-}
-
-func getTemplates() []string {
-	var templates []string
-	err := filepath.Walk("templates", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			log.Fatal(err)
-		}
-		if filepath.Ext(path) == ".gohtml" {
-			templates = append(templates, path)
-		}
-		return nil
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	return templates
 }
