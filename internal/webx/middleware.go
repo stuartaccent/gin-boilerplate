@@ -1,6 +1,8 @@
 package webx
 
 import (
+	"gin.go.dev/internal/db"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/time/rate"
@@ -53,15 +55,16 @@ func ContentTypes(allowedTypes ...string) gin.HandlerFunc {
 // CurrentUser middleware func to set the current active user.
 func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		cc := c.MustGet("custom").(*CustomContext)
+		session := c.MustGet("session").(sessions.Session)
+		queries := c.MustGet("queries").(*db.Queries)
 
-		userID, ok := cc.Session.Get("user_id").([16]byte)
+		userID, ok := session.Get("user_id").([16]byte)
 		if !ok {
 			return
 		}
 
 		userUUID := pgtype.UUID{Bytes: userID, Valid: true}
-		user, err := cc.Queries.GetUserByID(c.Request.Context(), userUUID)
+		user, err := queries.GetUserByID(c.Request.Context(), userUUID)
 		if err != nil || !user.IsActive {
 			return
 		}

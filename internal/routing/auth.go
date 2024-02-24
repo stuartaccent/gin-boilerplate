@@ -39,8 +39,8 @@ func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
 
 // loginForm get the login form
 func (r *AuthRouter) loginForm(c *gin.Context) {
-	cc := c.MustGet("custom").(*webx.CustomContext)
-	cc.Session.Clear()
+	session := c.MustGet("session").(sessions.Session)
+	session.Clear()
 	c.HTML(http.StatusOK, "loginPage", gin.H{
 		"Csrf": csrf.GetToken(c),
 	})
@@ -48,7 +48,8 @@ func (r *AuthRouter) loginForm(c *gin.Context) {
 
 // login the user from the login form then redirect to home
 func (r *AuthRouter) login(c *gin.Context) {
-	cc := c.MustGet("custom").(*webx.CustomContext)
+	session := c.MustGet("session").(sessions.Session)
+	queries := c.MustGet("queries").(*db.Queries)
 	invalid := func() {
 		c.HTML(http.StatusOK, "loginPage", gin.H{
 			"Error": "Invalid email address or password",
@@ -63,7 +64,7 @@ func (r *AuthRouter) login(c *gin.Context) {
 	}
 
 	email := strings.ToLower(credentials.Email)
-	user, err := cc.Queries.GetUserByEmail(c.Request.Context(), email)
+	user, err := queries.GetUserByEmail(c.Request.Context(), email)
 	if err != nil || !user.IsActive {
 		invalid()
 		return
@@ -75,8 +76,8 @@ func (r *AuthRouter) login(c *gin.Context) {
 		return
 	}
 
-	cc.Session.Set("user_id", user.ID.Bytes)
-	if err := cc.Session.Save(); err != nil {
+	session.Set("user_id", user.ID.Bytes)
+	if err := session.Save(); err != nil {
 		log.Printf("session save error: %v\n", err)
 		invalid()
 		return
@@ -87,10 +88,10 @@ func (r *AuthRouter) login(c *gin.Context) {
 
 // logout the user and redirect to login
 func (r *AuthRouter) logout(c *gin.Context) {
-	cc := c.MustGet("custom").(*webx.CustomContext)
-	cc.Session.Clear()
-	cc.Session.Options(sessions.Options{MaxAge: -1})
-	_ = cc.Session.Save()
+	session := c.MustGet("session").(sessions.Session)
+	session.Clear()
+	session.Options(sessions.Options{MaxAge: -1})
+	_ = session.Save()
 	c.Redirect(http.StatusFound, "/auth/login")
 }
 

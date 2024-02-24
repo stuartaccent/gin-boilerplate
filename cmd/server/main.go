@@ -93,8 +93,8 @@ func main() {
 	})
 	g.Use(sessions.Sessions("session", sessionStore))
 
-	// custom context middleware
-	g.Use(webx.NewCustomContext(dbPool))
+	// custom gin context middleware
+	g.Use(webx.SetGinContext(dbPool))
 
 	// templates
 	templates, err := webx.GetTemplates()

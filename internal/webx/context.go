@@ -7,27 +7,14 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// CustomContext hold various functionality for gin usage in gin.HandlerFunc
-// such as Queries and Session.
-type CustomContext struct {
-	*gin.Context
-	Postgres *pgxpool.Pool
-	Queries  *db.Queries
-	Session  sessions.Session
-}
-
-// NewCustomContext gin handler to create a new CustomContext.
-func NewCustomContext(dbPool *pgxpool.Pool) gin.HandlerFunc {
+// SetGinContext middleware func to set the context for the request.
+func SetGinContext(dbPool *pgxpool.Pool) gin.HandlerFunc {
 	queries := db.New(dbPool)
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		cc := &CustomContext{
-			Context:  c,
-			Postgres: dbPool,
-			Queries:  queries,
-			Session:  session,
-		}
-		c.Set("custom", cc)
+		c.Set("postgres", dbPool)
+		c.Set("queries", queries)
+		c.Set("session", session)
 		c.Next()
 	}
 }
