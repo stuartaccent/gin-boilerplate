@@ -9,8 +9,6 @@ FROM alpine
 WORKDIR /app
 COPY --from=builder /app/cli /app/cli
 COPY --from=builder /app/server /app/server
-COPY --from=builder /app/templates /app/templates
-COPY --from=builder /app/static /app/static
 COPY --from=builder /app/config.toml /app/config.toml
 EXPOSE 80
 ENTRYPOINT ["/app/server"]

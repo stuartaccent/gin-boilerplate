@@ -4,12 +4,13 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
+	"os"
+
 	"gin.go.dev/internal/config"
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/webx"
 	"github.com/jackc/pgx/v5"
-	"log"
-	"os"
 )
 
 func main() {

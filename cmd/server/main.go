@@ -2,10 +2,16 @@ package main
 
 import (
 	"context"
+	"embed"
 	"encoding/hex"
 	"errors"
 	"flag"
 	"fmt"
+	"io/fs"
+	"log"
+	"net/http"
+	"os"
+
 	"gin.go.dev/internal/config"
 	"gin.go.dev/internal/routing"
 	"gin.go.dev/internal/webx"
@@ -15,14 +21,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 	csrf "github.com/utrack/gin-csrf"
-	"log"
-	"net/http"
-	"os"
 )
 
 var (
 	helpFlag  = flag.Bool("help", false, "Display help information")
 	appConfig = flag.String("app-config", "config.toml", "The path of the app config eg: config.toml")
+
+	//go:embed static/*
+	static embed.FS
+	//go:embed templates/*
+	templates embed.FS
 )
 
 func main() {
@@ -97,14 +105,18 @@ func main() {
 	g.Use(webx.SetGinContext(dbPool))
 
 	// templates
-	templates, err := webx.GetTemplates()
+	tmpls, err := webx.GetTemplates(templates)
 	if err != nil {
 		log.Fatalf("Unable to load templates: %v", err)
 	}
-	g.SetHTMLTemplate(templates)
+	g.SetHTMLTemplate(tmpls)
 
 	// static
-	g.Static("/static", "./static")
+	staticFS, err := fs.Sub(static, "static")
+	if err != nil {
+		log.Fatalf("Unable to load static files: %v", err)
+	}
+	g.StaticFS("/static", http.FS(staticFS))
 
 	// routes
 	routing.NewMainRouter(g)

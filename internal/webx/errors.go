@@ -2,8 +2,9 @@ package webx
 
 import (
 	"fmt"
-	"github.com/go-playground/validator/v10"
 	"reflect"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // GetFieldErrors parses validation errors and returns a map keyed by

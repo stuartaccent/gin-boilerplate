@@ -1,13 +1,14 @@
 package webx
 
 import (
+	"net/http"
+	"sync"
+
 	"gin.go.dev/internal/db"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/time/rate"
-	"net/http"
-	"sync"
 )
 
 // Authenticated middleware func to ensure logged in, redirects to log-in if not.

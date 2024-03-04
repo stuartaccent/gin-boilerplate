@@ -1,9 +1,10 @@
 package routing
 
 import (
+	"net/http"
+
 	"gin.go.dev/internal/webx"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // MainRouter route handler.

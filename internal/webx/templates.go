@@ -1,21 +1,21 @@
 package webx
 
 import (
+	"embed"
 	"html/template"
-	"os"
-	"path/filepath"
+	"io/fs"
 	"strings"
 )
 
-func GetTemplates() (*template.Template, error) {
+func GetTemplates(filesystem embed.FS) (*template.Template, error) {
 	funcMap := template.FuncMap{}
 	t := template.New("").Funcs(funcMap)
-	err := filepath.Walk("templates", func(path string, info os.FileInfo, err error) error {
+	err := fs.WalkDir(filesystem, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if !info.IsDir() && strings.HasSuffix(info.Name(), ".gohtml") {
-			_, err = t.ParseFiles(path)
+		if !d.IsDir() && strings.HasSuffix(d.Name(), ".gohtml") {
+			_, err = t.ParseFS(filesystem, path)
 			if err != nil {
 				return err
 			}

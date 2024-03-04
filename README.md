@@ -87,17 +87,17 @@ npm run css
 ### Docker
 build:
 ```bash
-docker build -t wip-go:latest .
+docker build -t gin-boilerplate:latest .
 ```
 run:
 ```bash
 docker run \
 --rm \
---name wip-go \
+--name gin-boilerplate \
 --publish "80:80" \
 --env "DATABASE_HOST=host.docker.internal" \
 --env "SERVER_MODE=release" \
-wip-go:latest \
+gin-boilerplate:latest \
 -app-config config.toml
 ```
 cli:
