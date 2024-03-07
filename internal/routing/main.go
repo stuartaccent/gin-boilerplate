@@ -3,7 +3,7 @@ package routing
 import (
 	"net/http"
 
-	"gin.go.dev/internal/webx"
+	"gin.go.dev/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +14,7 @@ type MainRouter struct {
 // NewMainRouter create a new MainRouter.
 func NewMainRouter(e *gin.Engine) {
 	r := MainRouter{}
-	g := e.Group("/", webx.Authenticated())
+	g := e.Group("/", middleware.Authenticated())
 	g.GET("/", r.index)
 }
 

@@ -1,4 +1,4 @@
-package webx
+package templates
 
 import (
 	"embed"

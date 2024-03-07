@@ -1,4 +1,4 @@
-package webx
+package crypt
 
 import (
 	"golang.org/x/crypto/bcrypt"

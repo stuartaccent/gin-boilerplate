@@ -8,8 +8,8 @@ import (
 	"os"
 
 	"gin.go.dev/internal/config"
+	"gin.go.dev/internal/crypt"
 	"gin.go.dev/internal/db"
-	"gin.go.dev/internal/webx"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -88,7 +88,7 @@ func createUser(ctx context.Context, cfg *config.Config, email, password, firstN
 	}
 	defer conn.Close(ctx)
 
-	passwordHash, err := webx.GeneratePassword([]byte(password))
+	passwordHash, err := crypt.GeneratePassword([]byte(password))
 	if err != nil {
 		log.Fatalf("Error: %v\n", err)
 	}

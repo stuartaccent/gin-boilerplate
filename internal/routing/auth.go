@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"gin.go.dev/internal/crypt"
 	"gin.go.dev/internal/db"
-	"gin.go.dev/internal/webx"
+	"gin.go.dev/internal/middleware"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	csrf "github.com/utrack/gin-csrf"
@@ -33,9 +34,9 @@ func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
 	r := AuthRouter{}
 	g := e.Group("/auth")
 	g.GET("/login", csrf, r.loginForm)
-	g.POST("/login", webx.RateLimiter(rate.Limit(2), 5), webx.ContentTypes("application/x-www-form-urlencoded"), csrf, r.login)
+	g.POST("/login", middleware.RateLimiter(rate.Limit(2), 5), middleware.ContentTypes("application/x-www-form-urlencoded"), csrf, r.login)
 	g.GET("/logout", r.logout)
-	g.GET("/user-menu", webx.Authenticated(), r.userMenu)
+	g.GET("/user-menu", middleware.Authenticated(), r.userMenu)
 }
 
 // loginForm get the login form
@@ -72,7 +73,7 @@ func (r *AuthRouter) login(c *gin.Context) {
 	}
 
 	password := []byte(credentials.Password)
-	if !webx.CheckPassword(user.HashedPassword, password) {
+	if !crypt.CheckPassword(user.HashedPassword, password) {
 		invalid()
 		return
 	}

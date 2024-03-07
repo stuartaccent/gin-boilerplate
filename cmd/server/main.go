@@ -13,8 +13,9 @@ import (
 	"os"
 
 	"gin.go.dev/internal/config"
+	ctx "gin.go.dev/internal/context"
 	"gin.go.dev/internal/routing"
-	"gin.go.dev/internal/webx"
+	templatez "gin.go.dev/internal/templates"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -102,10 +103,10 @@ func main() {
 	g.Use(sessions.Sessions("session", sessionStore))
 
 	// custom gin context middleware
-	g.Use(webx.SetGinContext(dbPool))
+	g.Use(ctx.SetGinContext(dbPool))
 
 	// templates
-	tmpls, err := webx.GetTemplates(templates)
+	tmpls, err := templatez.GetTemplates(templates)
 	if err != nil {
 		log.Fatalf("Unable to load templates: %v", err)
 	}
