@@ -86,7 +86,9 @@ func createUser(ctx context.Context, cfg *config.Config, email, password, firstN
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %v\n", err)
 	}
-	defer conn.Close(ctx)
+	defer func(conn *pgx.Conn, ctx context.Context) {
+		_ = conn.Close(ctx)
+	}(conn, ctx)
 
 	passwordHash, err := crypt.GeneratePassword([]byte(password))
 	if err != nil {

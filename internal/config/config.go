@@ -14,6 +14,7 @@ type (
 	ServerMode string
 )
 
+//goland:noinspection GoUnusedConst
 const (
 	SslModeDisable SslMode = "disable"
 	SslModeAllow   SslMode = "allow"

@@ -19,7 +19,7 @@ func Authenticated() gin.HandlerFunc {
 		}
 
 		if _, exists := c.Get("user"); !exists {
-			hx := &htmx.HTMXHelper{Request: c.Request, Response: c.Writer}
+			hx := &htmx.Helper{Request: c.Request, Response: c.Writer}
 			if hx.IsHTMXRequest() {
 				hx.SetRedirect("/auth/login")
 				c.Status(http.StatusNoContent)
