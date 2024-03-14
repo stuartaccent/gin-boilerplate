@@ -1,0 +1,11 @@
+package components
+
+templ ErrorMessage(text string) {
+  if text != "" {
+    <div class="text-red-500">{ text }</div>
+  }
+}
+
+templ Header1(text string) {
+  <h1 class="text-2xl">{ text }</h1>
+}

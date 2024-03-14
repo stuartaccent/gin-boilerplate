@@ -1,0 +1,54 @@
+package components
+
+templ Head() {
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="htmx-config" content='{"includeIndicatorStyles":false}'/>
+    <title>Gin Boilerplate</title>
+    <link rel="stylesheet" href="/static/css/main.min.css"/>
+    <script src="/static/js/htmx.min.js"></script>
+  </head>
+}
+
+templ EmptyPage(greeting string) {
+	<!DOCTYPE html>
+	<html lang="en">
+	@Head()
+	<body class="h-screen flex flex-col">
+	  @Header()
+		<div class="container mx-auto p-5 grow space-y-6">
+      @Header1(greeting)
+    </div>
+		@Footer()
+	</body>
+	</html>
+}
+
+templ LoginPage(err string, csrf string) {
+  <!DOCTYPE html>
+  <html lang="en">
+  @Head()
+  <body class="h-screen flex flex-col bg-slate-800 text-slate-200">
+    <div class="container mx-auto p-5 grow flex flex-col items-center justify-center">
+      <div class="w-full max-w-md space-y-6">
+        @Header1("Login")
+        <form class="space-y-6" method="post" action="/auth/login">
+          <input type="hidden" name="_csrf" value={ csrf }/>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" class="p-2 rounded text-black w-full" type="email" name="email" placeholder="email address" required/>
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input id="password" class="p-2 rounded text-black w-full" type="password" name="password" placeholder="password" required/>
+          </div>
+          @ErrorMessage(err)
+          @ButtonDark("submit", "Login")
+        </form>
+      </div>
+    </div>
+    @Footer()
+  </body>
+  </html>
+}

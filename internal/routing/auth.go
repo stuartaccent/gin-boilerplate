@@ -2,13 +2,16 @@ package routing
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
 
+	"gin.go.dev/components"
 	"gin.go.dev/internal/crypt"
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/middleware"
+	"gin.go.dev/internal/renderer"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	csrf "github.com/utrack/gin-csrf"
@@ -25,38 +28,36 @@ type LoginCredentials struct {
 	Password string `form:"password" binding:"required,min=6"`
 }
 
-// AuthRouter route handler.
-type AuthRouter struct {
-}
-
 // NewAuthRouter create a new AuthRouter.
 func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
-	r := AuthRouter{}
 	g := e.Group("/auth")
-	g.GET("/login", csrf, r.loginForm)
-	g.POST("/login", middleware.RateLimiter(rate.Limit(2), 5), middleware.ContentTypes("application/x-www-form-urlencoded"), csrf, r.login)
-	g.GET("/logout", r.logout)
-	g.GET("/user-menu", middleware.Authenticated(), r.userMenu)
+	g.GET("/login", csrf, loginForm)
+	g.POST("/login", middleware.RateLimiter(rate.Limit(2), 5), middleware.ContentTypes("application/x-www-form-urlencoded"), csrf, login)
+	g.GET("/logout", logout)
+	g.GET("/user-menu", middleware.Authenticated(), userMenu)
 }
 
 // loginForm get the login form
-func (r *AuthRouter) loginForm(c *gin.Context) {
+func loginForm(c *gin.Context) {
+	ctx := c.Request.Context()
 	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
-	c.HTML(http.StatusOK, "loginPage", gin.H{
-		"Csrf": csrf.GetToken(c),
-	})
+	token := csrf.GetToken(c)
+	h := renderer.New(ctx, http.StatusOK, components.LoginPage("", token))
+	c.Render(http.StatusOK, h)
 }
 
 // login the user from the login form then redirect to home
-func (r *AuthRouter) login(c *gin.Context) {
-	session := c.MustGet("session").(sessions.Session)
+func login(c *gin.Context) {
+	ctx := c.Request.Context()
 	queries := c.MustGet("queries").(*db.Queries)
+	session := c.MustGet("session").(sessions.Session)
+
 	invalid := func() {
-		c.HTML(http.StatusOK, "loginPage", gin.H{
-			"Error": "Invalid email address or password",
-			"Csrf":  csrf.GetToken(c),
-		})
+		err := "Invalid email address or password"
+		token := csrf.GetToken(c)
+		h := renderer.New(ctx, http.StatusOK, components.LoginPage(err, token))
+		c.Render(http.StatusOK, h)
 	}
 
 	var credentials LoginCredentials
@@ -66,7 +67,7 @@ func (r *AuthRouter) login(c *gin.Context) {
 	}
 
 	email := strings.ToLower(credentials.Email)
-	user, err := queries.GetUserByEmail(c.Request.Context(), email)
+	user, err := queries.GetUserByEmail(ctx, email)
 	if err != nil || !user.IsActive {
 		invalid()
 		return
@@ -88,8 +89,8 @@ func (r *AuthRouter) login(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/")
 }
 
-// logout the user and redirect to login
-func (r *AuthRouter) logout(c *gin.Context) {
+// logout the user then redirect to login
+func logout(c *gin.Context) {
 	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
 	session.Options(sessions.Options{MaxAge: -1})
@@ -98,10 +99,16 @@ func (r *AuthRouter) logout(c *gin.Context) {
 }
 
 // userMenu the user menu in the header.
-func (r *AuthRouter) userMenu(c *gin.Context) {
+func userMenu(c *gin.Context) {
+	user := c.MustGet("user").(db.AuthUser)
+	ctx := c.Request.Context()
+	name := fmt.Sprint(user.FirstName, " ", user.LastName)
 	_, open := c.GetQuery("open")
-	c.HTML(http.StatusOK, "userMenu", gin.H{
-		"User": c.MustGet("user").(db.AuthUser),
-		"Open": open,
-	})
+	if open {
+		h := renderer.New(ctx, http.StatusOK, components.UserMenuOpen(name))
+		c.Render(http.StatusOK, h)
+	} else {
+		h := renderer.New(ctx, http.StatusOK, components.UserMenuClosed(name))
+		c.Render(http.StatusOK, h)
+	}
 }

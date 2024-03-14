@@ -3,13 +3,20 @@
 * Manage the database schema and apply migrations in `db/migrations`.
 * Manage the queries in `db/sqlc`.
 * Generated query directory `internal/db`.
+* Manage the templates in `components`.
 
 ### Install Go Tools
+for migrations:
 ```bash
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 ```
+for sqlc:
 ```bash
 go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+```
+for template rendering:
+```bash
+go install github.com/a-h/templ/cmd/templ@latest
 ```
 
 ### Config
@@ -54,6 +61,13 @@ down:
 ```bash
 migrate -source file://db/migrations \
 -database "postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable" down
+```
+
+### Compiling Templates
+
+Generate templates with [templ.guide](https://templ.guide)
+```bash
+templ generate -watch
 ```
 
 ### CLI

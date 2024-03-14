@@ -3,22 +3,21 @@ package routing
 import (
 	"net/http"
 
+	"gin.go.dev/components"
 	"gin.go.dev/internal/middleware"
+	"gin.go.dev/internal/renderer"
 	"github.com/gin-gonic/gin"
 )
 
-// MainRouter route handler.
-type MainRouter struct {
-}
-
 // NewMainRouter create a new MainRouter.
 func NewMainRouter(e *gin.Engine) {
-	r := MainRouter{}
 	g := e.Group("/", middleware.Authenticated())
-	g.GET("/", r.index)
+	g.GET("/", index)
 }
 
 // index root page endpoint.
-func (r *MainRouter) index(c *gin.Context) {
-	c.HTML(http.StatusOK, "indexPage", nil)
+func index(c *gin.Context) {
+	ctx := c.Request.Context()
+	h := renderer.New(ctx, http.StatusOK, components.EmptyPage("Home"))
+	c.Render(http.StatusOK, h)
 }

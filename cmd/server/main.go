@@ -14,8 +14,8 @@ import (
 
 	"gin.go.dev/internal/config"
 	ctx "gin.go.dev/internal/context"
+	"gin.go.dev/internal/renderer"
 	"gin.go.dev/internal/routing"
-	templatez "gin.go.dev/internal/templates"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -30,8 +30,6 @@ var (
 
 	//go:embed static/*
 	static embed.FS
-	//go:embed templates/*
-	templates embed.FS
 )
 
 func main() {
@@ -105,12 +103,8 @@ func main() {
 	// custom gin context middleware
 	g.Use(ctx.SetGinContext(dbPool))
 
-	// templates
-	tmpls, err := templatez.GetTemplates(templates)
-	if err != nil {
-		log.Fatalf("Unable to load templates: %v", err)
-	}
-	g.SetHTMLTemplate(tmpls)
+	// html renderer
+	g.HTMLRender = &renderer.HTMLTemplRenderer{FallbackHtmlRenderer: g.HTMLRender}
 
 	// static
 	staticFS, err := fs.Sub(static, "static")
