@@ -5,7 +5,7 @@
 * Generated query directory `internal/db`.
 * Manage the templates in `components`.
 
-### Install Go Tools
+## Tooling
 for migrations:
 ```bash
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
@@ -19,7 +19,7 @@ for template rendering:
 go install github.com/a-h/templ/cmd/templ@latest
 ```
 
-### Config
+## Config
 For configuration see the `config.toml` passed in as the `-app-config` flag to server and cli commands.
 
 > [!TIP]
@@ -27,23 +27,23 @@ For configuration see the `config.toml` passed in as the `-app-config` flag to s
 > 
 > "Could you generate random hex keys of 32 bytes and 16 bytes for me?"
 
-### Generate SQL Helpers
+## SQL Helpers
 make sure to use the correct db dsn in `sqlc.yml` and that the db is fully migrated.
 ```bash
 sqlc generate
 ```
 
-### Run Server
+## Run Server
 ```bash
 go run cmd/server/main.go
 ```
 
-### Build Server
+## Build Server
 ```bash
 go build -o server cmd/server/main.go
 ```
 
-### Migrations
+## Migrations
 
 new:
 ```bash
@@ -63,14 +63,14 @@ migrate -source file://db/migrations \
 -database "postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable" down
 ```
 
-### Compiling Templates
+## Templates
 
-Generate templates with [templ.guide](https://templ.guide)
+Generate template code with [templ.guide](https://templ.guide)
 ```bash
 templ generate -watch
 ```
 
-### CLI
+## CLI
 list commands:
 ```bash
 go run cmd/cli/main.go
@@ -88,7 +88,7 @@ go run cmd/cli/main.go createuser \
 -lastname User
 ```
 
-### Tailwind
+## Tailwind
 install:
 ```bash
 npm i
@@ -98,7 +98,7 @@ watch:
 npm run css
 ```
 
-### Docker
+## Docker
 build:
 ```bash
 docker build -t gin-boilerplate:latest .
@@ -117,4 +117,27 @@ gin-boilerplate:latest \
 cli:
 ```bash
 docker exec -it <container-id> ./cli
+```
+
+## Postgres Container
+create the volume:
+```bash
+docker volume create gin-postgres-data
+```
+create the container:
+```bash
+docker run --detach \
+--name "gin-postgres" \
+--volume "gin-postgres-data:/var/lib/postgresql/data" \
+--publish "5432:5432" \
+--env POSTGRES_USER=postgres \
+--env POSTGRES_PASSWORD=password \
+--env POSTGRES_DB=gin-boilerplate \
+postgres:latest
+```
+cleanup:
+```bash
+docker stop gin-postgres
+docker rm gin-postgres
+docker volume rm gin-postgres-data
 ```
