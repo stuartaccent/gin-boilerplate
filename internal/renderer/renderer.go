@@ -8,17 +8,15 @@ import (
 	"github.com/gin-gonic/gin/render"
 )
 
-var Default = &HTMLTemplRenderer{}
-
-type HTMLTemplRenderer struct {
-	FallbackHtmlRenderer render.HTMLRender
+type HTMLRenderer struct {
+	Fallback render.HTMLRender
 }
 
-func (r *HTMLTemplRenderer) Instance(s string, d any) render.Render {
+func (r *HTMLRenderer) Instance(s string, d any) render.Render {
 	templData, ok := d.(templ.Component)
 	if !ok {
-		if r.FallbackHtmlRenderer != nil {
-			return r.FallbackHtmlRenderer.Instance(s, d)
+		if r.Fallback != nil {
+			return r.Fallback.Instance(s, d)
 		}
 	}
 	return &Renderer{

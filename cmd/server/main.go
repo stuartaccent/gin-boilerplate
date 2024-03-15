@@ -104,7 +104,7 @@ func main() {
 	g.Use(ctx.SetGinContext(dbPool))
 
 	// html renderer
-	g.HTMLRender = &renderer.HTMLTemplRenderer{FallbackHtmlRenderer: g.HTMLRender}
+	g.HTMLRender = &renderer.HTMLRenderer{Fallback: g.HTMLRender}
 
 	// static
 	staticFS, err := fs.Sub(static, "static")
