@@ -72,7 +72,7 @@ func commandCreateUser(ctx context.Context) {
 		log.Fatalln("The -lastname flag is required.")
 	}
 
-	cfg, err := config.NewConfigFromPath(*conf)
+	cfg, err := config.FromPath(*conf)
 	if err != nil {
 		log.Fatalf("Invalid config: %v\n", err)
 	}

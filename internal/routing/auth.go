@@ -4,7 +4,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	"log"
-	"net/http"
 	"strings"
 
 	"gin.go.dev/components"
@@ -43,8 +42,8 @@ func loginForm(c *gin.Context) {
 	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
 	token := csrf.GetToken(c)
-	h := renderer.New(ctx, http.StatusOK, components.LoginPage("", token))
-	c.Render(http.StatusOK, h)
+	h := renderer.New(ctx, 200, components.LoginPage("", token))
+	c.Render(200, h)
 }
 
 // login the user from the login form then redirect to home
@@ -56,8 +55,8 @@ func login(c *gin.Context) {
 	invalid := func() {
 		err := "Invalid email address or password"
 		token := csrf.GetToken(c)
-		h := renderer.New(ctx, http.StatusOK, components.LoginPage(err, token))
-		c.Render(http.StatusOK, h)
+		h := renderer.New(ctx, 200, components.LoginPage(err, token))
+		c.Render(200, h)
 	}
 
 	var credentials LoginCredentials
@@ -86,7 +85,7 @@ func login(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(http.StatusFound, "/")
+	c.Redirect(302, "/")
 }
 
 // logout the user then redirect to login
@@ -95,7 +94,7 @@ func logout(c *gin.Context) {
 	session.Clear()
 	session.Options(sessions.Options{MaxAge: -1})
 	_ = session.Save()
-	c.Redirect(http.StatusFound, "/auth/login")
+	c.Redirect(302, "/auth/login")
 }
 
 // userMenu the user menu in the header.
@@ -105,10 +104,10 @@ func userMenu(c *gin.Context) {
 	name := fmt.Sprint(user.FirstName, " ", user.LastName)
 	_, open := c.GetQuery("open")
 	if open {
-		h := renderer.New(ctx, http.StatusOK, components.UserMenuOpen(name))
-		c.Render(http.StatusOK, h)
+		h := renderer.New(ctx, 200, components.UserMenuOpen(name))
+		c.Render(200, h)
 	} else {
-		h := renderer.New(ctx, http.StatusOK, components.UserMenuClosed(name))
-		c.Render(http.StatusOK, h)
+		h := renderer.New(ctx, 200, components.UserMenuClosed(name))
+		c.Render(200, h)
 	}
 }

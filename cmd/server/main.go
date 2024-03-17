@@ -40,7 +40,7 @@ func main() {
 	}
 
 	// parse the config file
-	cfg, err := config.NewConfigFromPath(*appConfig)
+	cfg, err := config.FromPath(*appConfig)
 	if err != nil {
 		log.Fatalf("Invalid config: %v", err)
 	}
@@ -101,7 +101,7 @@ func main() {
 	g.Use(sessions.Sessions("session", sessionStore))
 
 	// custom gin context middleware
-	g.Use(ctx.SetGinContext(dbPool))
+	g.Use(ctx.GinContext(dbPool))
 
 	// html renderer
 	g.HTMLRender = &renderer.HTMLRenderer{Fallback: g.HTMLRender}

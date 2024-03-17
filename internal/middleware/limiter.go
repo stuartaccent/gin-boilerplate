@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"net/http"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -45,9 +44,7 @@ func RateLimiter(r rate.Limit, burst int) gin.HandlerFunc {
 		lim := limiter.getLimiter(ip, r, burst)
 
 		if !lim.Allow() {
-			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
-				"error": "Too many requests",
-			})
+			c.AbortWithStatusJSON(429, gin.H{"error": "Too many requests"})
 			return
 		}
 

@@ -10,6 +10,14 @@ type Helper struct {
 	Response http.ResponseWriter
 }
 
+// New creates a new HTMX helper.
+func New(req *http.Request, res http.ResponseWriter) *Helper {
+	return &Helper{
+		Request:  req,
+		Response: res,
+	}
+}
+
 // IsHTMXRequest checks if the request is an HTMX request.
 func (h *Helper) IsHTMXRequest() bool {
 	return h.Request.Header.Get("HX-Request") == "true"

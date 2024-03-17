@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,9 +15,7 @@ func ContentTypes(allowedTypes ...string) gin.HandlerFunc {
 			}
 		}
 		if !isValidType {
-			c.AbortWithStatusJSON(http.StatusUnsupportedMediaType, gin.H{
-				"error": "Invalid content type",
-			})
+			c.AbortWithStatusJSON(415, gin.H{"error": "Invalid content type"})
 			return
 		}
 

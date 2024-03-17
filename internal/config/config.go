@@ -49,13 +49,13 @@ type Config struct {
 	Session  SessionConfig  `mapstructure:"session"`
 }
 
-// NewConfigFromPath creates and validates a new Config from a .toml file.
+// FromPath creates and validates a new Config from a .toml file.
 // If environment variables are set, they will override the values from the .toml file.
 // The environment variables must be prefixed with the
 // name of the configuration structure in uppercase, and the keys must be separated
 // by underscores. For example, to override the `port` value in the `server` structure,
 // the environment variable must be `SERVER_PORT`.
-func NewConfigFromPath(path string) (*Config, error) {
+func FromPath(path string) (*Config, error) {
 	config := &Config{}
 
 	viper.SetConfigFile(path)

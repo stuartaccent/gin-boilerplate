@@ -26,18 +26,18 @@ func (r *HTMLRenderer) Instance(s string, d any) render.Render {
 	}
 }
 
+type Renderer struct {
+	Ctx       context.Context
+	Status    int
+	Component templ.Component
+}
+
 func New(ctx context.Context, status int, component templ.Component) *Renderer {
 	return &Renderer{
 		Ctx:       ctx,
 		Status:    status,
 		Component: component,
 	}
-}
-
-type Renderer struct {
-	Ctx       context.Context
-	Status    int
-	Component templ.Component
 }
 
 func (t Renderer) Render(w http.ResponseWriter) error {
