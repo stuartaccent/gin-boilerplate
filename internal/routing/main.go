@@ -1,9 +1,9 @@
 package routing
 
 import (
-	"gin.go.dev/components"
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
+	"gin.go.dev/ui/pages"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +16,6 @@ func NewMainRouter(e *gin.Engine) {
 // index root page endpoint.
 func index(c *gin.Context) {
 	ctx := c.Request.Context()
-	h := renderer.New(ctx, 200, components.EmptyPage("Home"))
+	h := renderer.New(ctx, 200, pages.Home())
 	c.Render(200, h)
 }

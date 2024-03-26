@@ -1,0 +1,41 @@
+package pages
+
+import "gin.go.dev/ui/layouts"
+import "gin.go.dev/ui/styles"
+
+type LoginData struct {
+  Error string
+  Csrf  string
+}
+
+var loginLayout = layouts.Layout{
+  Title:      "Login",
+  ShowHeader: false,
+  ShowFooter: true,
+  BodyClass:  "bg-slate-800 text-slate-200",
+}
+
+templ Login(d LoginData) {
+  @layouts.Base(loginLayout) {
+    <div class="container mx-auto p-5 grow flex flex-col items-center justify-center">
+      <div class="w-full max-w-md space-y-6">
+        <h1 class="text-xl">{ loginLayout.Title }</h1>
+        <form class="space-y-6" method="post" action="/auth/login">
+          <input type="hidden" name="_csrf" value={ d.Csrf }/>
+          <div>
+            <label class={ styles.Label } for="email">Email address</label>
+            <input class={ styles.Input } id="email" type="email" name="email" required/>
+          </div>
+          <div>
+            <label class={ styles.Label } for="password">Password</label>
+            <input class={ styles.Input } id="password" type="password" name="password" required/>
+          </div>
+          if d.Error != "" {
+            <div class={ styles.Error }>{ d.Error }</div>
+          }
+          <button class={ styles.Button } type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  }
+}

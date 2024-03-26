@@ -6,11 +6,12 @@ import (
 	"log"
 	"strings"
 
-	"gin.go.dev/components"
 	"gin.go.dev/internal/crypt"
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
+	"gin.go.dev/ui/components"
+	"gin.go.dev/ui/pages"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	csrf "github.com/utrack/gin-csrf"
@@ -41,8 +42,10 @@ func loginForm(c *gin.Context) {
 	ctx := c.Request.Context()
 	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
-	token := csrf.GetToken(c)
-	h := renderer.New(ctx, 200, components.LoginPage("", token))
+	h := renderer.New(ctx, 200, pages.Login(pages.LoginData{
+		Error: "",
+		Csrf:  csrf.GetToken(c),
+	}))
 	c.Render(200, h)
 }
 
@@ -53,9 +56,10 @@ func login(c *gin.Context) {
 	session := c.MustGet("session").(sessions.Session)
 
 	invalid := func() {
-		err := "Invalid email address or password"
-		token := csrf.GetToken(c)
-		h := renderer.New(ctx, 200, components.LoginPage(err, token))
+		h := renderer.New(ctx, 200, pages.Login(pages.LoginData{
+			Error: "Invalid email address or password",
+			Csrf:  csrf.GetToken(c),
+		}))
 		c.Render(200, h)
 	}
 

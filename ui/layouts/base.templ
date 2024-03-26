@@ -1,0 +1,42 @@
+package layouts
+
+type Layout struct {
+  Title       string
+  ShowHeader  bool
+  ShowFooter  bool
+  BodyClass   string
+}
+
+templ Base(l Layout) {
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="htmx-config" content='{"includeIndicatorStyles":false}'/>
+    <title>Gin Boilerplate - { l.Title }</title>
+    <link rel="stylesheet" href="/static/css/main.min.css"/>
+    <script src="/static/js/htmx.min.js"></script>
+  </head>
+  <body class={ "h-screen flex flex-col " + l.BodyClass }>
+    if l.ShowHeader {
+      <header class="bg-slate-700 text-white body-font">
+        <div class="container mx-auto flex p-5 items-center">
+          <div class="text-xl mr-auto"><a href="/">Gin Boilerplate</a></div>
+          <div hx-get="/auth/user-menu" hx-swap="outerHTML" hx-trigger="load"></div>
+        </div>
+      </header>
+    }
+    { children... }
+    if l.ShowFooter {
+      <footer class="bg-slate-900 text-white body-font">
+        <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+          <p class="text-white text-sm text-center sm:text-left">
+            © 2024 <a href="https://github.com/stuartaccent/gin-boilerplate" class="text-gray-400 ml-1" target="_blank">Stuart George - Accent Design Group Ltd</a>
+          </p>
+        </div>
+      </footer>
+    }
+  </body>
+  </html>
+}

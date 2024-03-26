@@ -3,7 +3,7 @@
 * Manage the database schema and apply migrations in `db/migrations`.
 * Manage the queries in `db/sqlc`.
 * Generated query directory `internal/db`.
-* Manage the templates in `components`.
+* Manage the templates in `ui`.
 
 ## Tooling
 for migrations:
