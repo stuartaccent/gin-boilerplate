@@ -12,8 +12,9 @@ import (
 	"net/http"
 	"os"
 
+	"gin.go.dev/internal/middleware"
+
 	"gin.go.dev/internal/config"
-	ctx "gin.go.dev/internal/context"
 	"gin.go.dev/internal/renderer"
 	"gin.go.dev/internal/routing"
 	"github.com/gin-contrib/secure"
@@ -100,8 +101,9 @@ func main() {
 	})
 	g.Use(sessions.Sessions("session", sessionStore))
 
-	// custom gin context middleware
-	g.Use(ctx.GinContext(dbPool))
+	// custom middleware
+	g.Use(middleware.Database(dbPool))
+	g.Use(middleware.HTMX())
 
 	// html renderer
 	g.HTMLRender = &renderer.HTMLRenderer{Fallback: g.HTMLRender}

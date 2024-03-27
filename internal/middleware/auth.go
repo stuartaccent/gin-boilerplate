@@ -34,7 +34,7 @@ func Authenticated() gin.HandlerFunc {
 // CurrentUser middleware func to set the current active user.
 func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		session := c.MustGet("session").(sessions.Session)
+		session := sessions.Default(c)
 		queries := c.MustGet("queries").(*db.Queries)
 
 		userID, ok := session.Get("user_id").([16]byte)

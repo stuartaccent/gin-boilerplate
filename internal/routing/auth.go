@@ -6,10 +6,9 @@ import (
 	"log"
 	"strings"
 
-	"gin.go.dev/internal/htmx"
-
 	"gin.go.dev/internal/crypt"
 	"gin.go.dev/internal/db"
+	"gin.go.dev/internal/htmx"
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
 	"gin.go.dev/ui/components"
@@ -42,7 +41,7 @@ func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
 // loginForm get the login form
 func loginForm(c *gin.Context) {
 	ctx := c.Request.Context()
-	session := c.MustGet("session").(sessions.Session)
+	session := sessions.Default(c)
 	session.Clear()
 	h := renderer.New(ctx, 200, pages.Login(pages.LoginData{
 		Error: "",
@@ -56,7 +55,7 @@ func login(c *gin.Context) {
 	ctx := c.Request.Context()
 	hx := c.MustGet("htmx").(*htmx.Helper)
 	queries := c.MustGet("queries").(*db.Queries)
-	session := c.MustGet("session").(sessions.Session)
+	session := sessions.Default(c)
 
 	invalid := func() {
 		h := renderer.New(ctx, 200, pages.Login(pages.LoginData{
@@ -98,7 +97,7 @@ func login(c *gin.Context) {
 
 // logout the user then redirect to login
 func logout(c *gin.Context) {
-	session := c.MustGet("session").(sessions.Session)
+	session := sessions.Default(c)
 	session.Clear()
 	session.Options(sessions.Options{MaxAge: -1})
 	_ = session.Save()
