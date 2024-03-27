@@ -6,6 +6,8 @@ import (
 	"log"
 	"strings"
 
+	"gin.go.dev/internal/htmx"
+
 	"gin.go.dev/internal/crypt"
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/middleware"
@@ -52,6 +54,7 @@ func loginForm(c *gin.Context) {
 // login the user from the login form then redirect to home
 func login(c *gin.Context) {
 	ctx := c.Request.Context()
+	hx := c.MustGet("htmx").(*htmx.Helper)
 	queries := c.MustGet("queries").(*db.Queries)
 	session := c.MustGet("session").(sessions.Session)
 
@@ -89,7 +92,8 @@ func login(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(302, "/")
+	hx.SetRedirect("/")
+	c.Status(200)
 }
 
 // logout the user then redirect to login

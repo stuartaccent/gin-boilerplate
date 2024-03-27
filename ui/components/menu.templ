@@ -1,5 +1,7 @@
 package components
 
+import "gin.go.dev/ui/styles"
+
 templ UserMenuClosed(name string) {
   <div id="user-menu" class="relative">
     <button hx-get="/auth/user-menu?open" hx-swap="outerHTML" hx-target="#user-menu">{ name }</button>
@@ -9,9 +11,9 @@ templ UserMenuClosed(name string) {
 templ UserMenuOpen(name string) {
   <div id="user-menu" class="relative">
     <button hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click, load delay:3s">{ name }</button>
-    <div class="z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 absolute top-8 right-0">
-      <ul class="py-2 text-sm text-gray-700">
-        <li><a class="block px-4 py-2 hover:bg-gray-200" href="/auth/logout">Logout</a></li>
+    <div class={ styles.Menu, "w-44", "absolute", "top-8", "right-0" }>
+      <ul class={ styles.MenuItems }>
+        <li><a class={ styles.MenuLink } href="/auth/logout">Logout</a></li>
       </ul>
     </div>
   </div>

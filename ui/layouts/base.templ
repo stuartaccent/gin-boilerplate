@@ -18,7 +18,7 @@ templ Base(l Layout) {
     <link rel="stylesheet" href="/static/css/main.min.css"/>
     <script src="/static/js/htmx.min.js"></script>
   </head>
-  <body class={ "h-screen flex flex-col " + l.BodyClass }>
+  <body class={ "h-screen", "flex", "flex-col", l.BodyClass }>
     if l.ShowHeader {
       <header class="bg-slate-700 text-white body-font">
         <div class="container mx-auto flex p-5 items-center">
