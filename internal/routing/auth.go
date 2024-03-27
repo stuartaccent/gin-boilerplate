@@ -10,7 +10,6 @@ import (
 	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/htmx"
 	"gin.go.dev/internal/middleware"
-	"gin.go.dev/internal/renderer"
 	"gin.go.dev/ui/components"
 	"gin.go.dev/ui/pages"
 	"github.com/gin-contrib/sessions"
@@ -40,14 +39,12 @@ func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
 
 // loginForm get the login form
 func loginForm(c *gin.Context) {
-	ctx := c.Request.Context()
 	session := sessions.Default(c)
 	session.Clear()
-	h := renderer.New(ctx, 200, pages.Login(pages.LoginData{
+	c.HTML(200, "", pages.Login(pages.LoginData{
 		Error: "",
 		Csrf:  csrf.GetToken(c),
 	}))
-	c.Render(200, h)
 }
 
 // login the user from the login form then redirect to home
@@ -58,11 +55,10 @@ func login(c *gin.Context) {
 	session := sessions.Default(c)
 
 	invalid := func() {
-		h := renderer.New(ctx, 200, pages.Login(pages.LoginData{
+		c.HTML(200, "", pages.Login(pages.LoginData{
 			Error: "Invalid email address or password",
 			Csrf:  csrf.GetToken(c),
 		}))
-		c.Render(200, h)
 	}
 
 	var credentials LoginCredentials
@@ -85,7 +81,7 @@ func login(c *gin.Context) {
 	}
 
 	session.Set("user_id", user.ID.Bytes)
-	if err := session.Save(); err != nil {
+	if err = session.Save(); err != nil {
 		log.Printf("session save error: %v\n", err)
 		invalid()
 		return
@@ -107,14 +103,11 @@ func logout(c *gin.Context) {
 // userMenu the user menu in the header.
 func userMenu(c *gin.Context) {
 	user := c.MustGet("user").(db.AuthUser)
-	ctx := c.Request.Context()
 	name := fmt.Sprint(user.FirstName, " ", user.LastName)
 	_, open := c.GetQuery("open")
 	if open {
-		h := renderer.New(ctx, 200, components.UserMenuOpen(name))
-		c.Render(200, h)
+		c.HTML(200, "", components.UserMenuOpen(name))
 	} else {
-		h := renderer.New(ctx, 200, components.UserMenuClosed(name))
-		c.Render(200, h)
+		c.HTML(200, "", components.UserMenuClosed(name))
 	}
 }

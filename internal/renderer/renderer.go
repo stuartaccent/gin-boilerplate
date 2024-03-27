@@ -13,7 +13,7 @@ type HTMLRenderer struct {
 }
 
 func (r *HTMLRenderer) Instance(s string, d any) render.Render {
-	templData, ok := d.(templ.Component)
+	component, ok := d.(templ.Component)
 	if !ok {
 		if r.Fallback != nil {
 			return r.Fallback.Instance(s, d)
@@ -22,7 +22,7 @@ func (r *HTMLRenderer) Instance(s string, d any) render.Render {
 	return &Renderer{
 		Ctx:       context.Background(),
 		Status:    -1,
-		Component: templData,
+		Component: component,
 	}
 }
 
