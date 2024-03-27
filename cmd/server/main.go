@@ -12,9 +12,8 @@ import (
 	"net/http"
 	"os"
 
-	"gin.go.dev/internal/middleware"
-
 	"gin.go.dev/internal/config"
+	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
 	"gin.go.dev/internal/routing"
 	"github.com/gin-contrib/secure"
