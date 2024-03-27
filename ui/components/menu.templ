@@ -10,7 +10,7 @@ templ UserMenuClosed(name string) {
 
 templ UserMenuOpen(name string) {
   <div id="user-menu" class="relative">
-    <button hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click, load delay:3s">{ name }</button>
+    <button hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">{ name }</button>
     <div class={ styles.Menu, "w-44", "absolute", "top-8", "right-0" }>
       <ul class={ styles.MenuItems }>
         <li><a class={ styles.MenuLink } href="/auth/logout">Logout</a></li>

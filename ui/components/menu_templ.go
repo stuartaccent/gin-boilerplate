@@ -62,14 +62,14 @@ func UserMenuOpen(name string) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"user-menu\" class=\"relative\"><button hx-get=\"/auth/user-menu\" hx-swap=\"outerHTML\" hx-target=\"#user-menu\" hx-trigger=\"click, load delay:3s\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"user-menu\" class=\"relative\"><button hx-get=\"/auth/user-menu\" hx-swap=\"outerHTML\" hx-target=\"#user-menu\" hx-trigger=\"click from:body, load delay:5s\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/components/menu.templ`, Line: 13, Col: 120}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/components/menu.templ`, Line: 13, Col: 130}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
