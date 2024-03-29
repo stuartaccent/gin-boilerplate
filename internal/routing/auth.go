@@ -102,12 +102,12 @@ func logout(c *gin.Context) {
 
 // userMenu the user menu in the header.
 func userMenu(c *gin.Context) {
-	user := c.MustGet("user").(db.AuthUser)
-	name := fmt.Sprint(user.FirstName, " ", user.LastName)
 	_, open := c.GetQuery("open")
 	if open {
-		c.HTML(200, "", components.UserMenuOpen(name))
+		user := c.MustGet("user").(db.AuthUser)
+		name := fmt.Sprint(user.FirstName, " ", user.LastName)
+		c.HTML(200, "", components.UserMenuOpen(name, user.Email))
 	} else {
-		c.HTML(200, "", components.UserMenuClosed(name))
+		c.HTML(200, "", components.UserMenuClosed())
 	}
 }

@@ -1,17 +1,26 @@
 package components
 
 import "gin.go.dev/ui/styles"
+import "gin.go.dev/ui/svg"
 
-templ UserMenuClosed(name string) {
+templ UserMenuClosed() {
   <div id="user-menu" class="relative">
-    <button hx-get="/auth/user-menu?open" hx-swap="outerHTML" hx-target="#user-menu">{ name }</button>
+    <button hx-get="/auth/user-menu?open" hx-swap="outerHTML" hx-target="#user-menu">
+      @svg.UserCircle("inline-block w-8 h-8 bg-slate-700")
+    </button>
   </div>
 }
 
-templ UserMenuOpen(name string) {
+templ UserMenuOpen(name string, email string) {
   <div id="user-menu" class="relative">
-    <button hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">{ name }</button>
-    <div class={ styles.Menu, "w-44", "absolute", "top-8", "right-0" }>
+    <button hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">
+      @svg.UserCircle("inline-block w-8 h-8 bg-slate-700")
+    </button>
+    <div class={ styles.Menu, "absolute", "top-10", "right-0" }>
+      <div class="p-4 space-y-2 text-sm">
+        <div class="text-gray-700">{ name }</div>
+        <div class="text-gray-500">{ email }</div>
+      </div>
       <ul class={ styles.MenuItems }>
         <li><a class={ styles.MenuLink } href="/auth/logout">Logout</a></li>
       </ul>
