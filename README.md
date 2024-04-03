@@ -18,6 +18,10 @@ for template rendering:
 ```bash
 go install github.com/a-h/templ/cmd/templ@latest
 ```
+for air reloading:
+```bash
+go install github.com/cosmtrek/air@latest
+```
 
 ## Config
 For configuration see the `config.toml` passed in as the `-app-config` flag to server and cli commands.
