@@ -5,14 +5,13 @@ import "gin.go.dev/ui/layouts"
 var homeLayout = layouts.Layout{
   Title:      "Home",
   ShowHeader: true,
-  ShowFooter: true,
   BodyClass:  "",
 }
 
 templ Home() {
   @layouts.Base(homeLayout) {
-    <div class="container mx-auto p-5 grow space-y-6">
-      <h1 class="text-xl">Home</h1>
+    <div class="container mx-auto p-5">
+      <p>Home</p>
     </div>
   }
 }

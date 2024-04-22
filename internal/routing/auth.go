@@ -2,7 +2,6 @@ package routing
 
 import (
 	"encoding/gob"
-	"fmt"
 	"log"
 	"strings"
 
@@ -104,9 +103,7 @@ func logout(c *gin.Context) {
 func userMenu(c *gin.Context) {
 	_, open := c.GetQuery("open")
 	if open {
-		user := c.MustGet("user").(db.AuthUser)
-		name := fmt.Sprint(user.FirstName, " ", user.LastName)
-		c.HTML(200, "", components.UserMenuOpen(name, user.Email))
+		c.HTML(200, "", components.UserMenuOpen())
 	} else {
 		c.HTML(200, "", components.UserMenuClosed())
 	}

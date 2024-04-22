@@ -11,29 +11,28 @@ type LoginData struct {
 var loginLayout = layouts.Layout{
   Title:      "Login",
   ShowHeader: false,
-  ShowFooter: true,
-  BodyClass:  "bg-slate-800 text-slate-200",
+  BodyClass:  "p-4",
 }
 
 templ Login(d LoginData) {
   @layouts.Base(loginLayout) {
-    <div class="container mx-auto p-5 grow flex flex-col items-center justify-center">
-      <div class="w-full max-w-md space-y-6">
-        <h1 class="text-xl">{ loginLayout.Title }</h1>
-        <form id="loginForm" class="space-y-6" method="post" hx-post="/auth/login" hx-select="#loginForm" hx-swap="outerHTML">
+    <div class="min-h-screen flex flex-col items-center justify-center">
+      <div class="w-[350px] space-y-6">
+        <h1 class="text-2xl">{ loginLayout.Title }</h1>
+        <form id="form" class="space-y-6" method="post" hx-post="/auth/login" hx-select="#form" hx-swap="outerHTML">
           <input type="hidden" name="_csrf" value={ d.Csrf }/>
           <div>
-            <label class={ styles.Label } for="email">Email address</label>
-            <input class={ styles.Input } id="email" type="email" name="email" required/>
+            <label class={ styles.InputLabel } for="email">Email address</label>
+            <input class={ styles.Input("md") } id="email" type="email" name="email" required />
           </div>
           <div>
-            <label class={ styles.Label } for="password">Password</label>
-            <input class={ styles.Input } id="password" type="password" name="password" required/>
+            <label class={ styles.InputLabel } for="password">Password</label>
+            <input class={ styles.Input("md") } id="password" type="password" name="password" required />
           </div>
           if d.Error != "" {
-            <div class={ styles.Error }>{ d.Error }</div>
+            <div class={ styles.InputError }>{ d.Error }</div>
           }
-          <button class={ styles.Button(styles.Primary, styles.Md) } type="submit">Login</button>
+          <button class={ styles.Button("primary", "md"), "w-full" } type="submit">Login</button>
         </form>
       </div>
     </div>

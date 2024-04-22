@@ -6,7 +6,8 @@
   "private": true,
   "devDependencies": {
     "htmx.org": "1.9.11",
-    "tailwindcss": "3.4.3"
+    "tailwindcss": "3.4.3",
+    "tailwindcss-animate": "^1.0.7"
   },
   "scripts": {
     "css": "npx tailwindcss -i cmd/server/static/css/main.css -o cmd/server/static/css/main.min.css --watch --minify"
