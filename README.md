@@ -99,7 +99,10 @@ npm i
 ```
 watch:
 ```bash
-npm run css
+npm run css:base
+```
+```bash
+npm run css:utilities
 ```
 
 ## Docker
