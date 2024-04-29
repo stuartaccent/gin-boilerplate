@@ -42,11 +42,11 @@ func Base(l Layout) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link rel=\"stylesheet\" href=\"/static/css/main.min.css\"><script src=\"/static/js/htmx.min.js\"></script></head>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link rel=\"stylesheet\" href=\"/static/css/base.min.css\"><link rel=\"stylesheet\" href=\"/ui.css\"><link rel=\"stylesheet\" href=\"/static/css/utilities.min.css\"><script src=\"/static/js/htmx.min.js\"></script></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 = []any{"min-h-screen bg-background text-foreground antialiased", l.BodyClass}
+		var templ_7745c5c3_Var3 = []any{"min-h-screen antialiased", l.BodyClass}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var3...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -69,7 +69,7 @@ func Base(l Layout) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if l.ShowHeader {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"bg-accent text-accent-foreground\"><div class=\"container mx-auto flex p-5 items-center\"><div class=\"font-medium mr-auto\"><a href=\"/\">Gin Boilerplate</a></div><div hx-get=\"/auth/user-menu\" hx-swap=\"outerHTML\" hx-trigger=\"load\"></div></div></header>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"bg-gray-100\"><div class=\"container mx-auto flex p-5 items-center\"><div class=\"font-medium mr-auto\"><a href=\"/\">Gin Boilerplate</a></div><div hx-get=\"/auth/user-menu\" hx-swap=\"outerHTML\" hx-trigger=\"load\"></div></div></header>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

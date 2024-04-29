@@ -7,6 +7,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"gin.go.dev/ui/styles"
 	"io/fs"
 	"log"
 	"net/http"
@@ -30,6 +31,8 @@ var (
 
 	//go:embed static/*
 	static embed.FS
+
+	styleCache = styles.New()
 )
 
 func main() {
@@ -113,6 +116,14 @@ func main() {
 		log.Fatalf("Unable to load static files: %v", err)
 	}
 	g.StaticFS("/static", http.FS(staticFS))
+
+	// ui css
+	g.Handle("GET", "/ui.css", func(c *gin.Context) {
+		c.Writer.Header().Set("Content-Type", "text/css")
+		if err := styleCache.WriteCss(c.Writer); err != nil {
+			log.Printf("error writing style: %v", err)
+		}
+	})
 
 	// routes
 	routing.NewMainRouter(g)

@@ -3,6 +3,7 @@ module gin.go.dev
 go 1.22
 
 require (
+	github.com/AccentDesign/gcss v0.0.0-20240429125901-392c675de493
 	github.com/a-h/templ v0.2.663
 	github.com/gin-contrib/secure v1.0.0
 	github.com/gin-contrib/sessions v1.0.0
@@ -15,11 +16,9 @@ require (
 )
 
 require (
-	github.com/bytedance/sonic v1.11.5 // indirect
+	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
-	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
-	github.com/chenzhuoyu/iasm v0.9.1 // indirect
-	github.com/cloudwego/base64x v0.1.3 // indirect
+	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/dchest/uniuri v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

@@ -14,12 +14,14 @@ templ Base(l Layout) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="htmx-config" content='{"includeIndicatorStyles":false}'/>
     <title>Gin Boilerplate - { l.Title }</title>
-    <link rel="stylesheet" href="/static/css/main.min.css"/>
+    <link rel="stylesheet" href="/static/css/base.min.css"/>
+    <link rel="stylesheet" href="/ui.css"/>
+    <link rel="stylesheet" href="/static/css/utilities.min.css"/>
     <script src="/static/js/htmx.min.js"></script>
   </head>
-  <body class={ "min-h-screen bg-background text-foreground antialiased", l.BodyClass }>
+  <body class={ "min-h-screen antialiased", l.BodyClass }>
     if l.ShowHeader {
-      <header class="bg-accent text-accent-foreground">
+      <header class="bg-gray-100">
         <div class="container mx-auto flex p-5 items-center">
           <div class="font-medium mr-auto"><a href="/">Gin Boilerplate</a></div>
           <div hx-get="/auth/user-menu" hx-swap="outerHTML" hx-trigger="load"></div>

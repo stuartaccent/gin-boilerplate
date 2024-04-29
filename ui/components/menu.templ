@@ -1,10 +1,8 @@
 package components
 
-import "gin.go.dev/ui/styles"
-
 templ UserMenuClosed() {
   <div id="user-menu" class="relative">
-    <button class={ styles.Button("ghost", "md") } hx-get="/auth/user-menu?open" hx-swap="outerHTML" hx-target="#user-menu">
+    <button class="ui-button ui-button-ghost" hx-get="/auth/user-menu?open" hx-swap="outerHTML" hx-target="#user-menu">
       My Account
     </button>
   </div>
@@ -12,13 +10,13 @@ templ UserMenuClosed() {
 
 templ UserMenuOpen() {
   <div id="user-menu" class="relative">
-    <button class={ styles.Button("ghost", "md") } hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">
+    <button class="ui-button ui-button-ghost" hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">
       My Account
     </button>
-    <div class={ styles.Menu, "absolute", "top-9", "right-0", "w-40" }>
-      <div class={ styles.MenuLabel }>My Account</div>
-      <div class={ styles.MenuSeparator }></div>
-      <a class={ styles.MenuItem } href="/auth/logout">Logout</a>
+    <div class={ "ui-menu", "absolute", "top-9", "right-0", "shadow-lg" }>
+      <div class="ui-menu-label">My Account</div>
+      <div class="ui-menu-separator"></div>
+      <a class="ui-menu-item" href="/auth/logout">Logout</a>
     </div>
   </div>
 }

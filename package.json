@@ -10,6 +10,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "scripts": {
-    "css": "npx tailwindcss -i cmd/server/static/css/main.css -o cmd/server/static/css/main.min.css --watch --minify"
+    "css:base": "npx tailwindcss -i cmd/server/static/css/base.css -o cmd/server/static/css/base.min.css --watch --minify",
+    "css:utilities": "npx tailwindcss -i cmd/server/static/css/utilities.css -o cmd/server/static/css/utilities.min.css --watch --minify"
   }
 }

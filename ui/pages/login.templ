@@ -1,7 +1,6 @@
 package pages
 
 import "gin.go.dev/ui/layouts"
-import "gin.go.dev/ui/styles"
 
 type LoginData struct {
   Error string
@@ -21,18 +20,18 @@ templ Login(d LoginData) {
         <h1 class="text-2xl">{ loginLayout.Title }</h1>
         <form id="form" class="space-y-6" method="post" hx-post="/auth/login" hx-select="#form" hx-swap="outerHTML">
           <input type="hidden" name="_csrf" value={ d.Csrf }/>
-          <div>
-            <label class={ styles.InputLabel } for="email">Email address</label>
-            <input class={ styles.Input("md") } id="email" type="email" name="email" required />
+          <div class="space-y-1">
+            <label class="ui-input-label" for="email">Email address</label>
+            <input class="ui-input" id="email" type="email" name="email" required />
           </div>
-          <div>
-            <label class={ styles.InputLabel } for="password">Password</label>
-            <input class={ styles.Input("md") } id="password" type="password" name="password" required />
+          <div class="space-y-1">
+            <label class="ui-input-label" for="password">Password</label>
+            <input class="ui-input" id="password" type="password" name="password" required />
+            if d.Error != "" {
+              <div class="ui-input-error">{ d.Error }</div>
+            }
           </div>
-          if d.Error != "" {
-            <div class={ styles.InputError }>{ d.Error }</div>
-          }
-          <button class={ styles.Button("primary", "md"), "w-full" } type="submit">Login</button>
+          <button class="ui-button ui-button-primary w-full" type="submit">Login</button>
         </form>
       </div>
     </div>
