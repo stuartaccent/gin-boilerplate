@@ -2,11 +2,7 @@ package styles
 
 import (
 	"github.com/AccentDesign/gcss"
-	"github.com/AccentDesign/gcss/props/border"
-	"github.com/AccentDesign/gcss/props/display"
-	"github.com/AccentDesign/gcss/props/font"
-	"github.com/AccentDesign/gcss/props/overflow"
-	"github.com/AccentDesign/gcss/props/unit"
+	"github.com/AccentDesign/gcss/props"
 )
 
 var menu = []gcss.Style{
@@ -14,14 +10,14 @@ var menu = []gcss.Style{
 		Selector: ".ui-menu",
 		Props: gcss.Props{
 			BackgroundColor: white,
-			Border: border.Border{
-				Width: unit.Px(1),
-				Style: border.StyleSolid,
+			Border: props.Border{
+				Width: props.UnitPx(1),
+				Style: props.BorderStyleSolid,
 				Color: borderColor,
 			},
 			BorderRadius: radius,
-			MinWidth:     unit.Rem(10),
-			Overflow:     overflow.Hidden,
+			MinWidth:     props.UnitRem(10),
+			Overflow:     props.OverflowHidden,
 			Padding:      size1,
 		},
 	},
@@ -39,20 +35,20 @@ var menu = []gcss.Style{
 		Selector: ".ui-menu-separator",
 		Props: gcss.Props{
 			BackgroundColor: borderColor,
-			Height:          unit.Px(1),
+			Height:          props.UnitPx(1),
 			MarginTop:       size1,
 			MarginBottom:    size1,
-			MarginLeft:      unit.Rem(-0.25),
-			MarginRight:     unit.Rem(-0.25),
+			MarginLeft:      props.UnitRem(-0.25),
+			MarginRight:     props.UnitRem(-0.25),
 		},
 	},
 	{
 		Selector: ".ui-menu-item",
 		Props: gcss.Props{
 			BorderRadius:  radiusSm,
-			Display:       display.Block,
+			Display:       props.DisplayBlock,
 			FontSize:      fontSm,
-			FontWeight:    font.WeightMedium,
+			FontWeight:    props.FontWeightMedium,
 			LineHeight:    leadingTight,
 			PaddingTop:    size1,
 			PaddingRight:  size2,

@@ -2,24 +2,20 @@ package styles
 
 import (
 	"github.com/AccentDesign/gcss"
-	"github.com/AccentDesign/gcss/props/align"
-	"github.com/AccentDesign/gcss/props/colors"
-	"github.com/AccentDesign/gcss/props/display"
-	"github.com/AccentDesign/gcss/props/font"
-	"github.com/AccentDesign/gcss/props/justify"
+	"github.com/AccentDesign/gcss/props"
 )
 
 var buttons = []gcss.Style{
 	{
 		Selector: ".ui-button",
 		Props: gcss.Props{
-			AlignItems:     align.ItemsCenter,
+			AlignItems:     props.AlignItemsCenter,
 			BorderRadius:   radius,
-			Display:        display.InlineFlex,
+			Display:        props.DisplayInlineFlex,
 			FontSize:       fontSm,
-			FontWeight:     font.WeightMedium,
+			FontWeight:     props.FontWeightMedium,
 			Height:         size10,
-			JustifyContent: justify.ContentCenter,
+			JustifyContent: props.JustifyContentCenter,
 			LineHeight:     leadingTight,
 			PaddingTop:     size2,
 			PaddingRight:   size4,
@@ -56,7 +52,7 @@ var buttons = []gcss.Style{
 	{
 		Selector: ".ui-button-ghost",
 		Props: gcss.Props{
-			BackgroundColor: colors.Transparent(),
+			BackgroundColor: props.ColorTransparent(),
 		},
 	},
 	{
