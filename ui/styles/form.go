@@ -84,11 +84,11 @@ var form = []gcss.Style{
 		Props: gcss.Props{
 			Appearance:       props.AppearanceNone,
 			PaddingRight:     size10,
-			PrintColorAdjust: props.ColorAdjustExact,
+			PrintColorAdjust: props.PrintColorAdjustExact,
 			BackgroundImage:  iconChevronDown,
-			BackgroundPosition: props.BackgroundPositionEdgeOffset(
-				props.BackgroundPositionEdgeItem{Edge: props.BackgroundPositionEdgeRight, Unit: size3},
-				props.BackgroundPositionEdgeItem{Edge: props.BackgroundPositionEdgeCenter},
+			BackgroundPosition: props.BackgroundPositionEdges(
+				props.BackgroundPositionEdge{Position: props.BackgroundPositionRight, Unit: size3},
+				props.BackgroundPositionEdge{Position: props.BackgroundPositionCenter},
 			),
 			BackgroundRepeat: props.BackgroundRepeatNoRepeat,
 			BackgroundSize:   props.BackgroundSizeDimension(props.UnitEm(1), props.UnitEm(1)),
