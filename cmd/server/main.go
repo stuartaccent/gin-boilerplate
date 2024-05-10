@@ -25,9 +25,8 @@ import (
 )
 
 var (
-	helpFlag   = flag.Bool("help", false, "Display help information")
-	appConfig  = flag.String("app-config", "config.toml", "The path of the app config eg: config.toml")
-	styleCache = styles.New()
+	helpFlag  = flag.Bool("help", false, "Display help information")
+	appConfig = flag.String("app-config", "config.toml", "The path of the app config eg: config.toml")
 )
 
 func main() {
@@ -113,6 +112,11 @@ func main() {
 	g.StaticFS("/static", http.FS(staticFS))
 
 	// ui css
+	styleCache, err := styles.New()
+	if err != nil {
+		log.Fatalf("Unable to create style cache: %v", err)
+	}
+
 	g.Handle("GET", "/ui.css", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/css")
 		if err := styleCache.WriteCss(c.Writer); err != nil {
