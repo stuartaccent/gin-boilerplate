@@ -2,36 +2,31 @@ package main
 
 import (
 	"context"
-	"embed"
 	"encoding/hex"
 	"errors"
 	"flag"
 	"fmt"
-	"gin.go.dev/ui/styles"
-	"io/fs"
-	"log"
-	"net/http"
-	"os"
-
+	"gin.go.dev/embedded"
 	"gin.go.dev/internal/config"
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
 	"gin.go.dev/internal/routing"
+	"gin.go.dev/ui/styles"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 	csrf "github.com/utrack/gin-csrf"
+	"io/fs"
+	"log"
+	"net/http"
+	"os"
 )
 
 var (
-	helpFlag  = flag.Bool("help", false, "Display help information")
-	appConfig = flag.String("app-config", "config.toml", "The path of the app config eg: config.toml")
-
-	//go:embed static/*
-	static embed.FS
-
+	helpFlag   = flag.Bool("help", false, "Display help information")
+	appConfig  = flag.String("app-config", "config.toml", "The path of the app config eg: config.toml")
 	styleCache = styles.New()
 )
 
@@ -111,7 +106,7 @@ func main() {
 	g.HTMLRender = &renderer.HTMLRenderer{Fallback: g.HTMLRender}
 
 	// static
-	staticFS, err := fs.Sub(static, "static")
+	staticFS, err := fs.Sub(embedded.Static, "static")
 	if err != nil {
 		log.Fatalf("Unable to load static files: %v", err)
 	}
