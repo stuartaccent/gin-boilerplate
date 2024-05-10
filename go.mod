@@ -4,14 +4,14 @@ go 1.22
 
 require (
 	github.com/AccentDesign/gcss v0.0.1
-	github.com/a-h/templ v0.2.663
+	github.com/a-h/templ v0.2.680
 	github.com/gin-contrib/secure v1.1.0
 	github.com/gin-contrib/sessions v1.0.1
-	github.com/gin-gonic/gin v1.9.1
+	github.com/gin-gonic/gin v1.10.0
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/spf13/viper v1.18.2
 	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca
-	golang.org/x/crypto v0.22.0
+	golang.org/x/crypto v0.23.0
 	golang.org/x/time v0.5.0
 )
 
@@ -55,12 +55,12 @@ require (
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.8.0 // indirect
-	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f // indirect
-	golang.org/x/net v0.24.0 // indirect
+	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
+	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
-	google.golang.org/protobuf v1.34.0 // indirect
+	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
