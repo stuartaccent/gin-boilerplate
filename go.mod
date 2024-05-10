@@ -3,7 +3,7 @@ module gin.go.dev
 go 1.22
 
 require (
-	github.com/AccentDesign/gcss v0.0.1
+	github.com/AccentDesign/gcss v0.0.2
 	github.com/a-h/templ v0.2.680
 	github.com/gin-contrib/secure v1.1.0
 	github.com/gin-contrib/sessions v1.0.1
