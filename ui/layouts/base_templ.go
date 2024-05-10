@@ -42,7 +42,7 @@ func Base(l Layout) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link rel=\"stylesheet\" href=\"/static/css/base.min.css\"><link rel=\"stylesheet\" href=\"/ui.css\"><link rel=\"stylesheet\" href=\"/static/css/utilities.min.css\"><script src=\"/static/js/htmx.min.js\"></script></head>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link rel=\"stylesheet\" href=\"/static/css/base.min.css\"><link rel=\"stylesheet\" href=\"/ui.css\"><link rel=\"stylesheet\" href=\"/static/css/utilities.min.css\"><script src=\"/static/js/htmx.min.js\"></script><script src=\"/static/js/main.js\"></script></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

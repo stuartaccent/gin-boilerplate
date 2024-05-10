@@ -54,7 +54,7 @@ func login(c *gin.Context) {
 	session := sessions.Default(c)
 
 	invalid := func() {
-		c.HTML(200, "", pages.Login(pages.LoginData{
+		c.HTML(422, "", pages.Login(pages.LoginData{
 			Error: "Invalid email address or password",
 			Csrf:  csrf.GetToken(c),
 		}))
