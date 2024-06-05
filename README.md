@@ -92,19 +92,6 @@ go run cmd/cli/main.go createuser \
 -lastname User
 ```
 
-## Tailwind
-install:
-```bash
-npm i
-```
-watch:
-```bash
-npm run css:base
-```
-```bash
-npm run css:utilities
-```
-
 ## Docker
 build:
 ```bash

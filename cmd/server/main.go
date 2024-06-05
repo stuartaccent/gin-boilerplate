@@ -112,14 +112,11 @@ func main() {
 	g.StaticFS("/static", http.FS(staticFS))
 
 	// ui css
-	styleCache, err := styles.New()
-	if err != nil {
-		log.Fatalf("Unable to create style cache: %v", err)
-	}
+	stylesheet := styles.NewStyleSheet()
 
 	g.Handle("GET", "/ui.css", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/css")
-		if err := styleCache.WriteCss(c.Writer); err != nil {
+		if err := stylesheet.CSS(c.Writer); err != nil {
 			log.Printf("error writing style: %v", err)
 		}
 	})

@@ -3,63 +3,81 @@ package styles
 import (
 	"github.com/AccentDesign/gcss"
 	"github.com/AccentDesign/gcss/props"
+	"github.com/AccentDesign/gcss/variables"
 )
 
-var menu = []gcss.Style{
-	{
-		Selector: ".ui-menu",
-		Props: gcss.Props{
-			BackgroundColor: white,
-			Border: props.Border{
-				Width: props.UnitPx(1),
-				Style: props.BorderStyleSolid,
-				Color: borderColor,
+func (ss *StyleSheet) Menu() Styles {
+	return Styles{
+		{
+			Selector: ".ui-menu",
+			Props: gcss.Props{
+				Border: props.Border{
+					Width: props.UnitPx(1),
+					Style: props.BorderStyleSolid,
+				},
+				BorderRadius: variables.Size1H,
+				MinWidth:     props.UnitRem(10),
+				Overflow:     props.OverflowHidden,
+				Padding:      variables.Size1,
 			},
-			BorderRadius: radius,
-			MinWidth:     props.UnitRem(10),
-			Overflow:     props.OverflowHidden,
-			Padding:      size1,
 		},
-	},
-	{
-		Selector: ".ui-menu-label",
-		Props: gcss.Props{
-			FontSize:      fontSm,
-			PaddingTop:    size1,
-			PaddingRight:  size2,
-			PaddingBottom: size1,
-			PaddingLeft:   size2,
+		{
+			Selector: ".ui-menu-label",
+			Props: gcss.Props{
+				FontSize:      variables.Size3H,
+				PaddingTop:    variables.Size1,
+				PaddingRight:  variables.Size2,
+				PaddingBottom: variables.Size1,
+				PaddingLeft:   variables.Size2,
+			},
 		},
-	},
-	{
-		Selector: ".ui-menu-separator",
-		Props: gcss.Props{
-			BackgroundColor: borderColor,
-			Height:          props.UnitPx(1),
-			MarginTop:       size1,
-			MarginBottom:    size1,
-			MarginLeft:      props.UnitRem(-0.25),
-			MarginRight:     props.UnitRem(-0.25),
+		{
+			Selector: ".ui-menu-separator",
+			Props: gcss.Props{
+				Height:       props.UnitPx(1),
+				MarginTop:    variables.Size1,
+				MarginBottom: variables.Size1,
+				MarginLeft:   props.UnitRem(-0.25),
+				MarginRight:  props.UnitRem(-0.25),
+			},
 		},
-	},
-	{
-		Selector: ".ui-menu-item",
-		Props: gcss.Props{
-			BorderRadius:  radiusSm,
-			Display:       props.DisplayBlock,
-			FontSize:      fontSm,
-			FontWeight:    props.FontWeightMedium,
-			LineHeight:    leadingTight,
-			PaddingTop:    size1,
-			PaddingRight:  size2,
-			PaddingBottom: size1,
-			PaddingLeft:   size2,
+		{
+			Selector: ".ui-menu-item",
+			Props: gcss.Props{
+				BorderRadius:  variables.Size1,
+				Display:       props.DisplayBlock,
+				FontSize:      variables.Size3H,
+				FontWeight:    props.FontWeightMedium,
+				LineHeight:    variables.Size5,
+				PaddingTop:    variables.Size1,
+				PaddingRight:  variables.Size2,
+				PaddingBottom: variables.Size1,
+				PaddingLeft:   variables.Size2,
+			},
 		},
-	},
-	{
-		Selector: ".ui-menu-item:hover",
-		Props: gcss.Props{
-			BackgroundColor: secondary.Alpha(230),
+	}
+}
+
+func (t *Theme) Menu() Styles {
+	return Styles{
+		{
+			Selector: ".ui-menu",
+			Props: gcss.Props{
+				BackgroundColor: t.Background,
+				BorderColor:     t.Border,
+			},
 		},
-	},
+		{
+			Selector: ".ui-menu-separator",
+			Props: gcss.Props{
+				BackgroundColor: t.Border,
+			},
+		},
+		{
+			Selector: ".ui-menu-item:hover",
+			Props: gcss.Props{
+				BackgroundColor: t.Secondary.Alpha(230),
+			},
+		},
+	}
 }

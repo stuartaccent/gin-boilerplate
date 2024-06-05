@@ -13,7 +13,7 @@ templ UserMenuOpen() {
     <button class="ui-button ui-button-ghost" hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">
       My Account
     </button>
-    <div class={ "ui-menu", "absolute", "top-9", "right-0", "shadow-lg" }>
+    <div class={ "ui-menu", "absolute", "top-9", "right-0" }>
       <div class="ui-menu-label">My Account</div>
       <div class="ui-menu-separator"></div>
       <a class="ui-menu-item" href="/auth/logout">Logout</a>
