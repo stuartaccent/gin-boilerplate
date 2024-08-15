@@ -24,7 +24,7 @@ go install github.com/cosmtrek/air@latest
 ```
 
 ## Config
-For configuration see the `config.toml` passed in as the `-app-config` flag to server and cli commands.
+For configuration see the `config.toml` passed in as the `--config` flag to app.
 
 > [!TIP]
 > Generate new session auth keys ask [ChatGPT](https://chat.openai.com)
@@ -35,16 +35,6 @@ For configuration see the `config.toml` passed in as the `-app-config` flag to s
 make sure to use the correct db dsn in `sqlc.yml` and that the db is fully migrated.
 ```bash
 sqlc generate
-```
-
-## Run Server
-```bash
-go run cmd/server/main.go
-```
-
-## Build Server
-```bash
-go build -o server cmd/server/main.go
 ```
 
 ## Migrations
@@ -74,22 +64,24 @@ Generate template code with [templ.guide](https://templ.guide)
 templ generate -watch
 ```
 
-## CLI
-list commands:
+## Usage
+
 ```bash
-go run cmd/cli/main.go
+go run . help
 ```
 
-usage:
+run the server:
 ```bash
-go run cmd/cli/main.go createuser -help
+go run . server --config config.dev.toml
 ```
+
+create a user:
 ```bash
-go run cmd/cli/main.go createuser \
--email admin@example.com \
--password password \
--firstname Admin \
--lastname User
+go run . createuser --config config.dev.toml \
+--email admin@example.com \
+--password password \
+--firstname Admin \
+--lastname User
 ```
 
 ## Docker
@@ -97,6 +89,7 @@ build:
 ```bash
 docker build -t gin-boilerplate:latest .
 ```
+
 run:
 ```bash
 docker run \
@@ -106,11 +99,7 @@ docker run \
 --env "DATABASE_HOST=host.docker.internal" \
 --env "SERVER_MODE=release" \
 gin-boilerplate:latest \
--app-config config.toml
-```
-cli:
-```bash
-docker exec -it <container-id> ./cli
+server --config config.toml
 ```
 
 ## Postgres Container
@@ -118,6 +107,7 @@ create the volume:
 ```bash
 docker volume create gin-postgres-data
 ```
+
 create the container:
 ```bash
 docker run --detach \
@@ -129,6 +119,7 @@ docker run --detach \
 --env POSTGRES_DB=gin-boilerplate \
 postgres:latest
 ```
+
 cleanup:
 ```bash
 docker stop gin-postgres
