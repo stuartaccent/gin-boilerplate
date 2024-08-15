@@ -1,6 +1,6 @@
 module gin.go.dev
 
-go 1.22
+go 1.23.0
 
 require (
 	github.com/AccentDesign/gcss v0.1.2

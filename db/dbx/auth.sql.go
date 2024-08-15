@@ -96,3 +96,20 @@ func (q *Queries) GetUserByID(ctx context.Context, id pgtype.UUID) (AuthUser, er
 	)
 	return i, err
 }
+
+const setUserPasswordByEmail = `-- name: SetUserPasswordByEmail :exec
+UPDATE auth_users
+SET hashed_password = $1
+WHERE email = $2
+`
+
+type SetUserPasswordByEmailParams struct {
+	HashedPassword []byte `db:"hashed_password" json:"-"`
+	Email          string `db:"email" json:"email"`
+}
+
+// set a user's password
+func (q *Queries) SetUserPasswordByEmail(ctx context.Context, arg SetUserPasswordByEmailParams) error {
+	_, err := q.db.Exec(ctx, setUserPasswordByEmail, arg.HashedPassword, arg.Email)
+	return err
+}

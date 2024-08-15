@@ -5,6 +5,8 @@ import (
 	"gin.go.dev/internal/config"
 	"github.com/spf13/cobra"
 	"log"
+	"os"
+	"runtime"
 )
 
 var (
@@ -17,7 +19,12 @@ var rootCmd = &cobra.Command{
 	Use:   "app",
 	Short: "The main app command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hello from app")
+		fmt.Println("Go version: ", runtime.Version())
+		fmt.Println("Operating System: ", runtime.GOOS)
+		fmt.Println("CPU Architecture: ", runtime.GOARCH)
+		fmt.Println("Number of CPUs: ", runtime.NumCPU())
+		fmt.Println("GOROOT: ", runtime.GOROOT())
+		fmt.Println("GOPATH: ", os.Getenv("GOPATH"))
 	},
 }
 
@@ -26,6 +33,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is config.toml)")
 	rootCmd.AddCommand(cmdServer)
 	rootCmd.AddCommand(cmdCreateUser)
+	rootCmd.AddCommand(cmdSetPassword)
 }
 
 func initConfig() {

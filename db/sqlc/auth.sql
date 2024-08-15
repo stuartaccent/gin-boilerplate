@@ -17,3 +17,9 @@ SELECT *
 FROM auth_users
 WHERE id = @id
 LIMIT 1;
+
+-- name: SetUserPasswordByEmail :exec
+-- set a user's password
+UPDATE auth_users
+SET hashed_password = @hashed_password
+WHERE email = @email;
