@@ -45,7 +45,15 @@ var cmdServer = &cobra.Command{
 		gin.SetMode(cfg.Server.Mode.ToGinMode())
 
 		// create new engine
-		g := gin.Default()
+		g := gin.New()
+		g.Use(gin.Recovery())
+
+		// Conditionally use Metrics middleware
+		if cmd.Name() == "monitor" {
+			g.Use(middleware.MetricsMiddleware())
+		} else {
+			g.Use(gin.Logger())
+		}
 
 		// csrf middleware
 		csrfMiddleware := csrf.Middleware(csrf.Options{

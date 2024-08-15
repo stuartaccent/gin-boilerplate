@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"strings"
+	"text/tabwriter"
 )
 
 var (
@@ -19,12 +21,17 @@ var rootCmd = &cobra.Command{
 	Use:   "app",
 	Short: "The main app command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Go version: ", runtime.Version())
-		fmt.Println("Operating System: ", runtime.GOOS)
-		fmt.Println("CPU Architecture: ", runtime.GOARCH)
-		fmt.Println("Number of CPUs: ", runtime.NumCPU())
-		fmt.Println("GOROOT: ", runtime.GOROOT())
-		fmt.Println("GOPATH: ", os.Getenv("GOPATH"))
+		headers := []string{"GO VERSION", "OPERATING SYSTEM", "CPU ARCH", "NUM CPUS"}
+		row := []string{
+			runtime.Version(),
+			runtime.GOOS,
+			runtime.GOARCH,
+			fmt.Sprintf("%d", runtime.NumCPU()),
+		}
+		w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
+		fmt.Fprintln(w, strings.Join(headers, "\t"))
+		fmt.Fprintln(w, strings.Join(row, "\t"))
+		w.Flush()
 	},
 }
 
@@ -32,6 +39,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is config.toml)")
 	rootCmd.AddCommand(cmdServer)
+	rootCmd.AddCommand(cmdMonitor)
 	rootCmd.AddCommand(cmdCreateUser)
 	rootCmd.AddCommand(cmdSetPassword)
 }
