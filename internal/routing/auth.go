@@ -2,11 +2,8 @@ package routing
 
 import (
 	"encoding/gob"
-	"log"
-	"strings"
-
+	"gin.go.dev/db/dbx"
 	"gin.go.dev/internal/crypt"
-	"gin.go.dev/internal/db"
 	"gin.go.dev/internal/htmx"
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/ui/components"
@@ -15,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 	csrf "github.com/utrack/gin-csrf"
 	"golang.org/x/time/rate"
+	"log"
+	"strings"
 )
 
 func init() {
@@ -50,7 +49,7 @@ func loginForm(c *gin.Context) {
 func login(c *gin.Context) {
 	ctx := c.Request.Context()
 	hx := c.MustGet("htmx").(*htmx.Helper)
-	queries := c.MustGet("queries").(*db.Queries)
+	queries := c.MustGet("queries").(*dbx.Queries)
 	session := sessions.Default(c)
 
 	invalid := func() {

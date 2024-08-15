@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"gin.go.dev/db/dbx"
 	"gin.go.dev/internal/crypt"
-	"gin.go.dev/internal/db"
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/cobra"
 	"log"
@@ -43,8 +43,8 @@ var cmdCreateUser = &cobra.Command{
 			log.Fatalf("Error: %v\n", err)
 		}
 
-		queries := db.New(conn)
-		user, err := queries.CreateUser(ctx, db.CreateUserParams{
+		queries := dbx.New(conn)
+		user, err := queries.CreateUser(ctx, dbx.CreateUserParams{
 			Email:          createEmail,
 			HashedPassword: passwordHash,
 			FirstName:      createFirstName,

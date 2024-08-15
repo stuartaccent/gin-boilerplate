@@ -1,13 +1,12 @@
 package middleware
 
 import (
-	"net/http"
-
-	"gin.go.dev/internal/db"
+	"gin.go.dev/db/dbx"
 	"gin.go.dev/internal/htmx"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
+	"net/http"
 )
 
 // Authenticated middleware func to ensure logged in, redirects to log-in if not.
@@ -35,7 +34,7 @@ func Authenticated() gin.HandlerFunc {
 func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		queries := c.MustGet("queries").(*db.Queries)
+		queries := c.MustGet("queries").(*dbx.Queries)
 
 		userID, ok := session.Get("user_id").([16]byte)
 		if !ok {
