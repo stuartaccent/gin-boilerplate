@@ -20,7 +20,7 @@ go install github.com/a-h/templ/cmd/templ@latest
 ```
 for air reloading:
 ```bash
-go install github.com/cosmtrek/air@latest
+go install github.com/air-verse/air@latest
 ```
 
 ## Config
