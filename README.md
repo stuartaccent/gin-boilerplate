@@ -103,28 +103,17 @@ server --config config.toml
 ```
 
 ## Postgres Container
-create the volume:
-```bash
-docker volume create gin-postgres-data
-```
 
 create the container:
 ```bash
 docker run --detach \
 --name "gin-postgres" \
---volume "gin-postgres-data:/var/lib/postgresql/data" \
+--mount type=tmpfs,destination=/var/lib/postgresql/data \
 --publish "5432:5432" \
 --env POSTGRES_USER=postgres \
 --env POSTGRES_PASSWORD=password \
 --env POSTGRES_DB=gin-boilerplate \
 postgres:latest
-```
-
-cleanup:
-```bash
-docker stop gin-postgres
-docker rm gin-postgres
-docker volume rm gin-postgres-data
 ```
 
 ## Load Testing
