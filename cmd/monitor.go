@@ -12,8 +12,8 @@ var cmdMonitor = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		go func() {
 			for {
-				<-time.After(time.Second * 1)
-				middleware.MetricsResults.WriteMetrics()
+				<-time.After(time.Second * 5)
+				middleware.MetricsResults.WriteMetrics(50)
 			}
 		}()
 		cmdServer.Run(cmd, args)

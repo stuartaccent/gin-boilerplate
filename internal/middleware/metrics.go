@@ -3,9 +3,8 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"maps"
 	"os"
-	"slices"
+	"sort"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -26,12 +25,12 @@ type MetricsData struct {
 }
 
 type MetricsStore struct {
-	metricsMap sync.Map // map[string]*MetricsData
+	data sync.Map // map[string]*MetricsData
 }
 
 func (store *MetricsStore) AddMetric(url, method string, recd, sent int64, duration time.Duration, status int) {
 	key := url + "|" + method
-	metrics, _ := store.metricsMap.LoadOrStore(key, &MetricsData{})
+	metrics, _ := store.data.LoadOrStore(key, &MetricsData{})
 	md := metrics.(*MetricsData)
 
 	atomic.AddUint64(&md.TotalRequests, 1)
@@ -59,26 +58,44 @@ func (store *MetricsStore) AddMetric(url, method string, recd, sent int64, durat
 	}
 }
 
-func (store *MetricsStore) GetMetrics() map[string]MetricsData {
-	result := make(map[string]MetricsData)
-	store.metricsMap.Range(func(key, data interface{}) bool {
-		result[key.(string)] = MetricsData{
-			TotalRequests:      atomic.LoadUint64(&data.(*MetricsData).TotalRequests),
-			TotalBytesReceived: atomic.LoadUint64(&data.(*MetricsData).TotalBytesReceived),
-			TotalBytesSent:     atomic.LoadUint64(&data.(*MetricsData).TotalBytesSent),
-			Total1xx:           atomic.LoadUint64(&data.(*MetricsData).Total1xx),
-			Total2xx:           atomic.LoadUint64(&data.(*MetricsData).Total2xx),
-			Total3xx:           atomic.LoadUint64(&data.(*MetricsData).Total3xx),
-			Total4xx:           atomic.LoadUint64(&data.(*MetricsData).Total4xx),
-			Total5xx:           atomic.LoadUint64(&data.(*MetricsData).Total5xx),
-			TotalDuration:      atomic.LoadUint64(&data.(*MetricsData).TotalDuration),
-		}
+func (store *MetricsStore) SortedMetrics() []struct {
+	Key  string
+	Data MetricsData
+} {
+	var metricsSlice []struct {
+		Key  string
+		Data MetricsData
+	}
+	store.data.Range(func(key, data interface{}) bool {
+		md := data.(*MetricsData)
+		metricsSlice = append(metricsSlice, struct {
+			Key  string
+			Data MetricsData
+		}{
+			Key: key.(string),
+			Data: MetricsData{
+				TotalRequests:      atomic.LoadUint64(&md.TotalRequests),
+				TotalBytesReceived: atomic.LoadUint64(&md.TotalBytesReceived),
+				TotalBytesSent:     atomic.LoadUint64(&md.TotalBytesSent),
+				Total1xx:           atomic.LoadUint64(&md.Total1xx),
+				Total2xx:           atomic.LoadUint64(&md.Total2xx),
+				Total3xx:           atomic.LoadUint64(&md.Total3xx),
+				Total4xx:           atomic.LoadUint64(&md.Total4xx),
+				Total5xx:           atomic.LoadUint64(&md.Total5xx),
+				TotalDuration:      atomic.LoadUint64(&md.TotalDuration),
+			},
+		})
 		return true
 	})
-	return result
+
+	sort.Slice(metricsSlice, func(i, j int) bool {
+		return metricsSlice[j].Data.TotalRequests < metricsSlice[i].Data.TotalRequests
+	})
+
+	return metricsSlice
 }
 
-func (store *MetricsStore) WriteMetrics() {
+func (store *MetricsStore) WriteMetrics(topX int) {
 	fmt.Print("\033[H\033[2J")
 	headers := []string{
 		"URL",
@@ -96,14 +113,17 @@ func (store *MetricsStore) WriteMetrics() {
 		"AVG DURATION",
 	}
 	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
-	metrics := store.GetMetrics()
-	keys := maps.Keys(metrics)
+
 	fmt.Fprintln(w, strings.Join(headers, "\t"))
-	for _, key := range slices.Sorted(keys) {
-		data := metrics[key]
+
+	for i, entry := range store.SortedMetrics() {
+		if i >= topX {
+			break
+		}
+		data := entry.Data
 		row := []string{
-			strings.Split(key, "|")[0],
-			strings.Split(key, "|")[1],
+			strings.Split(entry.Key, "|")[0],
+			strings.Split(entry.Key, "|")[1],
 			fmt.Sprintf("%d", data.TotalRequests),
 			fmt.Sprintf("%d", data.Total1xx),
 			fmt.Sprintf("%d", data.Total2xx),
@@ -127,8 +147,7 @@ func (data *MetricsData) duration() string {
 		return "0s"
 	}
 	totalDuration := atomic.LoadUint64(&data.TotalDuration)
-	avgDuration := time.Duration(totalDuration / totalRequests)
-	return avgDuration.String()
+	return time.Duration(totalDuration / totalRequests).String()
 }
 
 func byteSI(bytes uint64) string {
