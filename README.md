@@ -85,9 +85,11 @@ go run . createuser --config config.dev.toml \
 ```
 
 ## Docker
+This can be used to build the app as a binary and run it in a container.
+
 build:
 ```bash
-docker build -t gin-boilerplate:latest .
+docker build --build-arg EXPOSE_PORT=80 -t gin-boilerplate:latest .
 ```
 
 run:
@@ -98,6 +100,7 @@ docker run \
 --publish "80:80" \
 --env "DATABASE_HOST=host.docker.internal" \
 --env "SERVER_MODE=release" \
+--env "SERVER_PORT=80" \
 gin-boilerplate:latest \
 server --config config.toml
 ```

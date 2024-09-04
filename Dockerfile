@@ -9,6 +9,9 @@ FROM alpine
 WORKDIR /app
 COPY --from=builder /app/app /app/app
 COPY --from=builder /app/config.toml /app/config.toml
-EXPOSE 80
+
+ARG EXPOSE_PORT=80
+EXPOSE ${EXPOSE_PORT}
+
 ENTRYPOINT ["/app/app"]
 CMD ["server", "--config", "config.toml"]
