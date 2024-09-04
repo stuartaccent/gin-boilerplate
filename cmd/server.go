@@ -27,15 +27,7 @@ var cmdServer = &cobra.Command{
 	Short: "Start the server",
 	Run: func(cmd *cobra.Command, args []string) {
 		// set up the db pool
-		dbPool, err := pgxpool.New(context.Background(), fmt.Sprintf(
-			"host=%s port=%v user=%s password=%s database=%s sslmode=%s",
-			cfg.Database.Host,
-			cfg.Database.Port,
-			cfg.Database.User,
-			cfg.Database.Password,
-			cfg.Database.Db,
-			cfg.Database.SslMode,
-		))
+		dbPool, err := pgxpool.New(context.Background(), cfg.Database.URL().String())
 		if err != nil {
 			log.Fatalf("Unable to create connection pool: %v\n", err)
 		}

@@ -1,8 +1,11 @@
 package config
 
 import (
+	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -109,4 +112,17 @@ type SessionConfig struct {
 	Secure   bool          `mapstructure:"secure"`
 	HttpOnly bool          `mapstructure:"http_only"`
 	SameSite http.SameSite `mapstructure:"same_site"`
+}
+
+// URL returns the database URL.
+func (c DatabaseConfig) URL() *url.URL {
+	query := url.Values{}
+	query.Set("sslmode", string(c.SslMode))
+	return &url.URL{
+		Scheme:   "postgres",
+		User:     url.UserPassword(c.User, c.Password),
+		Host:     net.JoinHostPort(c.Host, fmt.Sprintf("%d", c.Port)),
+		Path:     c.Db,
+		RawQuery: query.Encode(),
+	}
 }

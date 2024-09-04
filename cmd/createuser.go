@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"gin.go.dev/db/dbx"
 	"gin.go.dev/internal/crypt"
 	"github.com/jackc/pgx/v5"
@@ -24,15 +23,7 @@ var cmdCreateUser = &cobra.Command{
 
 		ctx := context.Background()
 
-		conn, err := pgx.Connect(ctx, fmt.Sprintf(
-			"host=%s port=%v user=%s password=%s database=%s sslmode=%s",
-			cfg.Database.Host,
-			cfg.Database.Port,
-			cfg.Database.User,
-			cfg.Database.Password,
-			cfg.Database.Db,
-			cfg.Database.SslMode,
-		))
+		conn, err := pgx.Connect(ctx, cfg.Database.URL().String())
 		if err != nil {
 			log.Fatalf("Error connecting to the database: %v\n", err)
 		}
