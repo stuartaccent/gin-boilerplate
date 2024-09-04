@@ -109,7 +109,8 @@ server --config config.toml
 
 create the container:
 ```bash
-docker run --detach \
+docker run \
+--detach \
 --name "gin-postgres" \
 --mount type=tmpfs,destination=/var/lib/postgresql/data \
 --publish "5432:5432" \
