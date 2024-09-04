@@ -25,6 +25,12 @@ func (ss *StyleSheet) Buttons() Styles {
 				PaddingLeft:    variables.Size4,
 			},
 		},
+		{
+			Selector: ".ui-button:hover",
+			Props: gcss.Props{
+				Cursor: props.CursorPointer,
+			},
+		},
 	}
 }
 
