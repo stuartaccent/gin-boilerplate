@@ -39,7 +39,7 @@ sqlc generate
 
 ## Migrations
 
-new:
+new, requires `golang-migrate` cli to be installed:
 ```bash
 migrate create -ext sql -dir db/migrations \
 -seq <do_something>
@@ -47,14 +47,12 @@ migrate create -ext sql -dir db/migrations \
 
 up:
 ```bash
-migrate -source file://db/migrations \
--database "postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable" up
+go run . migrate --config config.dev.toml up
 ```
 
 down:
 ```bash
-migrate -source file://db/migrations \
--database "postgres://postgres:password@localhost:5432/gin-boilerplate?sslmode=disable" down
+go run . migrate --config config.dev.toml down
 ```
 
 ## Templates

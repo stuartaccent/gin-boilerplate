@@ -5,10 +5,7 @@ import (
 	"gin.go.dev/internal/config"
 	"github.com/spf13/cobra"
 	"log"
-	"os"
 	"runtime"
-	"strings"
-	"text/tabwriter"
 )
 
 var (
@@ -21,17 +18,11 @@ var rootCmd = &cobra.Command{
 	Use:   "app",
 	Short: "The main app command",
 	Run: func(cmd *cobra.Command, args []string) {
-		headers := []string{"GO VERSION", "OPERATING SYSTEM", "CPU ARCH", "NUM CPUS"}
-		row := []string{
-			runtime.Version(),
-			runtime.GOOS,
-			runtime.GOARCH,
-			fmt.Sprintf("%d", runtime.NumCPU()),
-		}
-		w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
-		fmt.Fprintln(w, strings.Join(headers, "\t"))
-		fmt.Fprintln(w, strings.Join(row, "\t"))
-		w.Flush()
+		fmt.Printf("Go version: %s\n", runtime.Version())
+		fmt.Printf("OS: %s\n", runtime.GOOS)
+		fmt.Printf("Arch: %s\n", runtime.GOARCH)
+		fmt.Printf("CPUs: %d\n\n", runtime.NumCPU())
+		cmd.Usage()
 	},
 }
 
@@ -42,6 +33,7 @@ func init() {
 	rootCmd.AddCommand(cmdMonitor)
 	rootCmd.AddCommand(cmdCreateUser)
 	rootCmd.AddCommand(cmdSetPassword)
+	rootCmd.AddCommand(cmdMigrate)
 }
 
 func initConfig() {
