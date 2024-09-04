@@ -5,10 +5,10 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"gin.go.dev/embedded"
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
 	"gin.go.dev/internal/routing"
+	"gin.go.dev/public"
 	"gin.go.dev/ui/styles"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
@@ -89,7 +89,7 @@ var cmdServer = &cobra.Command{
 		g.HTMLRender = &renderer.HTMLRenderer{Fallback: g.HTMLRender}
 
 		// static
-		staticFS, err := fs.Sub(embedded.Static, "static")
+		staticFS, err := fs.Sub(public.Static, "static")
 		if err != nil {
 			log.Fatalf("Unable to load static files: %v", err)
 		}
