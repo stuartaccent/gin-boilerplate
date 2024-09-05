@@ -17,12 +17,11 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "app",
 	Short: "The main app command",
-	Run: func(cmd *cobra.Command, args []string) {
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Go version: %s\n", runtime.Version())
 		fmt.Printf("OS: %s\n", runtime.GOOS)
 		fmt.Printf("Arch: %s\n", runtime.GOARCH)
 		fmt.Printf("CPUs: %d\n\n", runtime.NumCPU())
-		cmd.Usage()
 	},
 }
 
@@ -30,7 +29,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is config.toml)")
 	rootCmd.AddCommand(cmdServer)
-	rootCmd.AddCommand(cmdMonitor)
 	rootCmd.AddCommand(cmdCreateUser)
 	rootCmd.AddCommand(cmdSetPassword)
 	rootCmd.AddCommand(cmdMigrate)

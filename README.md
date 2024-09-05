@@ -73,6 +73,11 @@ run the server:
 go run . server --config config.dev.toml
 ```
 
+run the server with monitoring:
+```bash
+go run . server monitor --config config.dev.toml 
+```
+
 create a user:
 ```bash
 go run . createuser --config config.dev.toml \
