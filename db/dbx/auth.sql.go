@@ -18,10 +18,10 @@ RETURNING id, email, hashed_password, first_name, last_name, is_active, is_verif
 `
 
 type CreateUserParams struct {
-	Email          string `db:"email" json:"email"`
-	HashedPassword []byte `db:"hashed_password" json:"-"`
-	FirstName      string `db:"first_name" json:"first_name"`
-	LastName       string `db:"last_name" json:"last_name"`
+	Email          string `json:"email"`
+	HashedPassword []byte `json:"-"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
 }
 
 // create a new user
@@ -104,8 +104,8 @@ WHERE email = $2
 `
 
 type SetUserPasswordByEmailParams struct {
-	HashedPassword []byte `db:"hashed_password" json:"-"`
-	Email          string `db:"email" json:"email"`
+	HashedPassword []byte `json:"-"`
+	Email          string `json:"email"`
 }
 
 // set a user's password
