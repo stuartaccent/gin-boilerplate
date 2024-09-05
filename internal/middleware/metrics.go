@@ -96,7 +96,7 @@ func (store *MetricsStore) SortedMetrics() []struct {
 }
 
 func (store *MetricsStore) WriteMetrics(topX int) {
-	fmt.Print("\033[H\033[2J")
+	fmt.Print("\033[H\033[2J\033[3J")
 	headers := []string{
 		"URL",
 		"METHOD",
