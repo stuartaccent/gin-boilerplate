@@ -8,8 +8,6 @@ import (
 	"gin.go.dev/internal/middleware"
 	"gin.go.dev/internal/renderer"
 	"gin.go.dev/internal/routing"
-	"gin.go.dev/public"
-	"gin.go.dev/ui/styles"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -17,7 +15,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/cobra"
 	csrf "github.com/utrack/gin-csrf"
-	"io/fs"
 	"log"
 	"net/http"
 	"time"
@@ -88,7 +85,7 @@ func runServer(engine *gin.Engine) {
 		},
 	})
 
-	engine.Use(secure.New(secure.Config{
+	secureMiddleware := secure.New(secure.Config{
 		AllowedHosts:          cfg.Security.AllowedHosts,
 		STSSeconds:            cfg.Security.StsSeconds,
 		STSIncludeSubdomains:  cfg.Security.StsIncludeSubdomains,
@@ -96,11 +93,9 @@ func runServer(engine *gin.Engine) {
 		ContentTypeNosniff:    cfg.Security.ContentTypeNosniff,
 		BrowserXssFilter:      cfg.Security.BrowserXSSFilter,
 		ContentSecurityPolicy: cfg.Security.ContentSecurityPolicy,
-	}))
+	})
 
-	sessionKey := decodeHex(cfg.Session.Key)
-	sessionEnc := decodeHex(cfg.Session.EncKey)
-	sessionStore := cookie.NewStore(sessionKey, sessionEnc)
+	sessionStore := cookie.NewStore(decodeHex(cfg.Session.Key), decodeHex(cfg.Session.EncKey))
 	sessionStore.Options(sessions.Options{
 		Path:     cfg.Session.Path,
 		Domain:   cfg.Session.Domain,
@@ -109,27 +104,17 @@ func runServer(engine *gin.Engine) {
 		HttpOnly: cfg.Session.HttpOnly,
 		SameSite: cfg.Session.SameSite,
 	})
-	engine.Use(sessions.Sessions("session", sessionStore))
 
-	engine.Use(middleware.Database(dbPool))
-	engine.Use(middleware.HTMX())
+	engine.Use(
+		secureMiddleware,
+		sessions.Sessions("session", sessionStore),
+		middleware.Database(dbPool),
+		middleware.HTMX(),
+	)
 
 	engine.HTMLRender = &renderer.HTMLRenderer{Fallback: engine.HTMLRender}
 
-	staticFS, err := fs.Sub(public.Static, "static")
-	if err != nil {
-		log.Fatalf("Unable to load static files: %v", err)
-	}
-	engine.StaticFS("/static", http.FS(staticFS))
-
-	stylesheet := styles.NewStyleSheet()
-	engine.Handle("GET", "/ui.css", func(c *gin.Context) {
-		c.Writer.Header().Set("Content-Type", "text/css")
-		if err := stylesheet.CSS(c.Writer); err != nil {
-			log.Printf("error writing style: %v", err)
-		}
-	})
-
+	routing.NewStaticRouter(engine)
 	routing.NewMainRouter(engine)
 	routing.NewAuthRouter(engine, csrfMiddleware)
 
