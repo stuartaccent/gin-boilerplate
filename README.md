@@ -59,7 +59,7 @@ go run . migrate --config config.dev.toml down
 
 Generate template code with [templ.guide](https://templ.guide)
 ```bash
-templ generate -watch
+templ generate
 ```
 
 ## Usage
