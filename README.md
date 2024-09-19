@@ -73,11 +73,6 @@ run the server:
 go run . server --config config.dev.toml
 ```
 
-run the server with monitoring:
-```bash
-go run . server monitor --config config.dev.toml 
-```
-
 create a user:
 ```bash
 go run . createuser --config config.dev.toml \
@@ -104,6 +99,9 @@ docker run \
 --env "DATABASE_HOST=host.docker.internal" \
 --env "SERVER_MODE=release" \
 --env "SERVER_PORT=80" \
+--log-driver=fluentd \
+--log-opt fluentd-address=localhost:24224 \
+--log-opt tag=docker.gin.boilerplate \
 gin-boilerplate:latest \
 server --config config.toml
 ```

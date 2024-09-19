@@ -10,9 +10,10 @@ import (
 	"gin.go.dev/ui/pages"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	sloggin "github.com/samber/slog-gin"
 	csrf "github.com/utrack/gin-csrf"
 	"golang.org/x/time/rate"
-	"log"
+	"log/slog"
 	"strings"
 )
 
@@ -80,7 +81,7 @@ func login(c *gin.Context) {
 
 	session.Set("user_id", user.ID.Bytes)
 	if err = session.Save(); err != nil {
-		log.Printf("session save error: %v\n", err)
+		sloggin.AddCustomAttributes(c, slog.String("error", err.Error()))
 		invalid()
 		return
 	}

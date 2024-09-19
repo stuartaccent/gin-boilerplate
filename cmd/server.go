@@ -13,53 +13,23 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
+	slogformatter "github.com/samber/slog-formatter"
+	sloggin "github.com/samber/slog-gin"
 	"github.com/spf13/cobra"
 	csrf "github.com/utrack/gin-csrf"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"time"
 )
-
-var (
-	monitorDuration time.Duration
-	monitorLines    int
-)
-
-var cmdMonitor = &cobra.Command{
-	Use:   "monitor",
-	Short: "Start the server with monitoring",
-	Run: func(cmd *cobra.Command, args []string) {
-		gin.SetMode(cfg.Server.Mode.ToGinMode())
-
-		engine := gin.New()
-		engine.Use(gin.Recovery(), middleware.MetricsMiddleware())
-
-		go func() {
-			for {
-				<-time.After(monitorDuration)
-				middleware.MetricsResults.WriteMetrics(monitorLines)
-			}
-		}()
-
-		runServer(engine)
-	},
-}
 
 var cmdServer = &cobra.Command{
 	Use:   "server",
 	Short: "Start the server",
 	Run: func(cmd *cobra.Command, args []string) {
-		gin.SetMode(cfg.Server.Mode.ToGinMode())
-
-		engine := gin.Default()
-		runServer(engine)
+		runServer()
 	},
-}
-
-func init() {
-	cmdMonitor.Flags().DurationVarP(&monitorDuration, "duration", "d", time.Second*5, "Duration between metrics collection")
-	cmdMonitor.Flags().IntVarP(&monitorLines, "lines", "l", 50, "Number of lines to print")
-	cmdServer.AddCommand(cmdMonitor)
 }
 
 func decodeHex(hexStr string) []byte {
@@ -70,7 +40,28 @@ func decodeHex(hexStr string) []byte {
 	return decoded
 }
 
-func runServer(engine *gin.Engine) {
+func initLogging(e *gin.Engine) {
+	logger := slog.New(
+		slogformatter.NewFormatterHandler(
+			slogformatter.TimezoneConverter(time.UTC),
+			slogformatter.TimeFormatter(time.RFC3339, nil),
+		)(
+			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}),
+		),
+	)
+	logger = logger.With("gin_mode", cfg.Server.Mode.ToGinMode())
+
+	config := sloggin.Config{
+		WithUserAgent: true,
+		WithRequestID: true,
+	}
+
+	e.Use(sloggin.NewWithConfig(logger, config))
+}
+
+func runServer() {
+	gin.SetMode(cfg.Server.Mode.ToGinMode())
+
 	dbPool, err := pgxpool.New(context.Background(), cfg.Database.URL().String())
 	if err != nil {
 		log.Fatalf("Unable to create connection pool: %v\n", err)
@@ -105,7 +96,12 @@ func runServer(engine *gin.Engine) {
 		SameSite: cfg.Session.SameSite,
 	})
 
+	engine := gin.New()
+
+	initLogging(engine)
+
 	engine.Use(
+		gin.Recovery(),
 		secureMiddleware,
 		sessions.Sessions("session", sessionStore),
 		middleware.Database(dbPool),

@@ -6,6 +6,8 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
+	sloggin "github.com/samber/slog-gin"
+	"log/slog"
 	"net/http"
 )
 
@@ -46,6 +48,8 @@ func CurrentUser() gin.HandlerFunc {
 		if err != nil || !user.IsActive {
 			return
 		}
+
+		sloggin.AddCustomAttributes(c, slog.String("user", user.Email))
 
 		c.Set("user", user)
 	}
