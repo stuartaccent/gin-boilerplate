@@ -17,10 +17,6 @@ var cmdCreateUser = &cobra.Command{
 	Use:   "createuser",
 	Short: "Creates a new user",
 	Run: func(cmd *cobra.Command, args []string) {
-		if cfg == nil {
-			log.Fatalf("Config not initialized")
-		}
-
 		ctx := context.Background()
 
 		conn, err := pgx.Connect(ctx, cfg.Database.URL().String())

@@ -2,10 +2,9 @@ package renderer
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin/render"
+	"net/http"
 )
 
 type HTMLRenderer struct {
@@ -30,14 +29,6 @@ type Renderer struct {
 	Ctx       context.Context
 	Status    int
 	Component templ.Component
-}
-
-func New(ctx context.Context, status int, component templ.Component) *Renderer {
-	return &Renderer{
-		Ctx:       ctx,
-		Status:    status,
-		Component: component,
-	}
 }
 
 func (t Renderer) Render(w http.ResponseWriter) error {

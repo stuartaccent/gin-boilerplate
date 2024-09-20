@@ -14,6 +14,7 @@ import (
 	csrf "github.com/utrack/gin-csrf"
 	"golang.org/x/time/rate"
 	"log/slog"
+	"net/http"
 	"strings"
 )
 
@@ -29,20 +30,24 @@ type LoginCredentials struct {
 
 // NewAuthRouter create a new AuthRouter.
 func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
+	limiter := middleware.RateLimiter(rate.Limit(2), 5)
+	typeForm := middleware.ContentTypes("application/x-www-form-urlencoded")
+	auth := middleware.Authenticated()
 	g := e.Group("/auth")
-	g.GET("/login", csrf, loginForm)
-	g.POST("/login", middleware.RateLimiter(rate.Limit(2), 5), middleware.ContentTypes("application/x-www-form-urlencoded"), csrf, login)
-	g.GET("/logout", logout)
-	g.GET("/user-menu", middleware.Authenticated(), userMenu)
+	{
+		g.GET("/login", csrf, loginForm)
+		g.POST("/login", limiter, typeForm, csrf, login)
+		g.GET("/logout", logout)
+		g.GET("/user-menu", auth, userMenu)
+	}
 }
 
 // loginForm get the login form
 func loginForm(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
-	c.HTML(200, "", pages.Login(pages.LoginData{
-		Error: "",
-		Csrf:  csrf.GetToken(c),
+	c.HTML(http.StatusOK, "", pages.Login(pages.LoginData{
+		Csrf: csrf.GetToken(c),
 	}))
 }
 
@@ -54,8 +59,8 @@ func login(c *gin.Context) {
 	session := sessions.Default(c)
 
 	invalid := func() {
-		c.HTML(422, "", pages.Login(pages.LoginData{
-			Error: "Invalid email address or password",
+		c.HTML(http.StatusUnprocessableEntity, "", pages.Login(pages.LoginData{
+			Error: "invalid email address or password",
 			Csrf:  csrf.GetToken(c),
 		}))
 	}
@@ -87,7 +92,7 @@ func login(c *gin.Context) {
 	}
 
 	hx.SetRedirect("/")
-	c.Status(200)
+	c.Status(http.StatusOK)
 }
 
 // logout the user then redirect to login
@@ -96,15 +101,14 @@ func logout(c *gin.Context) {
 	session.Clear()
 	session.Options(sessions.Options{MaxAge: -1})
 	_ = session.Save()
-	c.Redirect(302, "/auth/login")
+	c.Redirect(http.StatusFound, "/auth/login")
 }
 
 // userMenu the user menu in the header.
 func userMenu(c *gin.Context) {
-	_, open := c.GetQuery("open")
-	if open {
-		c.HTML(200, "", components.UserMenuOpen())
+	if _, open := c.GetQuery("open"); open {
+		c.HTML(http.StatusOK, "", components.UserMenuOpen())
 	} else {
-		c.HTML(200, "", components.UserMenuClosed())
+		c.HTML(http.StatusOK, "", components.UserMenuClosed())
 	}
 }

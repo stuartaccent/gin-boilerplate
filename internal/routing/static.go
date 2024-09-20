@@ -4,8 +4,10 @@ import (
 	"gin.go.dev/public"
 	"gin.go.dev/ui/styles"
 	"github.com/gin-gonic/gin"
+	sloggin "github.com/samber/slog-gin"
 	"io/fs"
 	"log"
+	"log/slog"
 	"net/http"
 )
 
@@ -34,6 +36,8 @@ func staticFS() http.FileSystem {
 func (r *StaticRouter) uiCss(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "text/css")
 	if err := r.stylesheet.CSS(c.Writer); err != nil {
-		log.Printf("error writing style: %v", err)
+		sloggin.AddCustomAttributes(c, slog.String("error", err.Error()))
+		c.Status(http.StatusInternalServerError)
+		return
 	}
 }

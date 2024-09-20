@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/hex"
 	"fmt"
 	"log"
 	"net"
@@ -125,4 +126,24 @@ func (c DatabaseConfig) URL() *url.URL {
 		Path:     c.Db,
 		RawQuery: query.Encode(),
 	}
+}
+
+// KeyBytes returns the session key as a byte array.
+// The key is expected to be a 32 or 64 character hexadecimal string.
+func (c SessionConfig) KeyBytes() (result []byte) {
+	result, err := hex.DecodeString(c.Key)
+	if err != nil {
+		log.Fatalf("Invalid session key: %v", err)
+	}
+	return
+}
+
+// EncKeyBytes returns the session encryption key as a byte array.
+// The key is expected to be a 32 or 64 character hexadecimal string.
+func (c SessionConfig) EncKeyBytes() (result []byte) {
+	result, err := hex.DecodeString(c.EncKey)
+	if err != nil {
+		log.Fatalf("Invalid session encryption key: %v", err)
+	}
+	return
 }

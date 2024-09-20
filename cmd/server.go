@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"gin.go.dev/internal/middleware"
@@ -32,14 +31,6 @@ var cmdServer = &cobra.Command{
 	},
 }
 
-func decodeHex(hexStr string) []byte {
-	decoded, err := hex.DecodeString(hexStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return decoded
-}
-
 func initLogging(e *gin.Engine) {
 	logger := slog.New(
 		slogformatter.NewFormatterHandler(
@@ -59,13 +50,24 @@ func initLogging(e *gin.Engine) {
 	e.Use(sloggin.NewWithConfig(logger, config))
 }
 
-func runServer() {
-	gin.SetMode(cfg.Server.Mode.ToGinMode())
-
-	dbPool, err := pgxpool.New(context.Background(), cfg.Database.URL().String())
+func initPool() *pgxpool.Pool {
+	ctx := context.Background()
+	dbPool, err := pgxpool.New(ctx, cfg.Database.URL().String())
 	if err != nil {
 		log.Fatalf("Unable to create connection pool: %v\n", err)
 	}
+
+	if err := dbPool.Ping(ctx); err != nil {
+		log.Fatalf("Unable to ping database: %v\n", err)
+	}
+
+	return dbPool
+}
+
+func runServer() {
+	gin.SetMode(cfg.Server.Mode.ToGinMode())
+
+	dbPool := initPool()
 	defer dbPool.Close()
 
 	csrfMiddleware := csrf.Middleware(csrf.Options{
@@ -86,7 +88,7 @@ func runServer() {
 		ContentSecurityPolicy: cfg.Security.ContentSecurityPolicy,
 	})
 
-	sessionStore := cookie.NewStore(decodeHex(cfg.Session.Key), decodeHex(cfg.Session.EncKey))
+	sessionStore := cookie.NewStore(cfg.Session.KeyBytes(), cfg.Session.EncKeyBytes())
 	sessionStore.Options(sessions.Options{
 		Path:     cfg.Session.Path,
 		Domain:   cfg.Session.Domain,
