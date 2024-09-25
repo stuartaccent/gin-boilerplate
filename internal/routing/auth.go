@@ -11,7 +11,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
-	csrf "github.com/utrack/gin-csrf"
+	csrf "github.com/stuartaccent/gin-csrf"
 	"golang.org/x/time/rate"
 	"log/slog"
 	"net/http"

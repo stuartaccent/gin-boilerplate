@@ -14,7 +14,7 @@ require (
 	github.com/samber/slog-gin v1.13.5
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
-	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca
+	github.com/stuartaccent/gin-csrf v1.0.0
 	golang.org/x/crypto v0.27.0
 	golang.org/x/time v0.6.0
 )

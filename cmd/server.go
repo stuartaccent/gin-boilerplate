@@ -15,7 +15,7 @@ import (
 	slogformatter "github.com/samber/slog-formatter"
 	sloggin "github.com/samber/slog-gin"
 	"github.com/spf13/cobra"
-	csrf "github.com/utrack/gin-csrf"
+	csrf "github.com/stuartaccent/gin-csrf"
 	"log"
 	"log/slog"
 	"net/http"
