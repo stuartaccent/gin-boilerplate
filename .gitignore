@@ -1,6 +1,5 @@
 .idea
 bin
-node_modules
 tmp
 .air.toml
 config.dev.toml

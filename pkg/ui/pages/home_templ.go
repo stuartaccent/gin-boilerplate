@@ -8,7 +8,7 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "gin.go.dev/ui/layouts"
+import "gin.go.dev/pkg/ui/layouts"
 
 var homeLayout = layouts.Layout{
 	Title:      "Home",

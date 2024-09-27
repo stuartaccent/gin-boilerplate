@@ -3,14 +3,13 @@ package config
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 )
 
 type (

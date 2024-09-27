@@ -1,8 +1,7 @@
 package middleware
 
 import (
-	"gin.go.dev/db/dbx"
-	"gin.go.dev/internal/htmx"
+	"gin.go.dev/pkg/storage/db/dbx"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -20,7 +19,7 @@ func Authenticated() gin.HandlerFunc {
 		}
 
 		if _, exists := c.Get("user"); !exists {
-			hx := c.MustGet("htmx").(*htmx.Helper)
+			hx := c.MustGet("htmx").(*HTMXHelper)
 			if hx.IsHTMXRequest() {
 				hx.SetRedirect("/auth/login")
 				c.Status(http.StatusNoContent)

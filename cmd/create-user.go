@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"context"
-	"gin.go.dev/db/dbx"
-	"gin.go.dev/internal/crypt"
+	"fmt"
+	"gin.go.dev/pkg/auth"
+	"gin.go.dev/pkg/storage/db/dbx"
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/cobra"
-	"log"
+	"os"
 )
 
 var (
@@ -21,13 +22,15 @@ var cmdCreateUser = &cobra.Command{
 
 		conn, err := pgx.Connect(ctx, cfg.Database.URL().String())
 		if err != nil {
-			log.Fatalf("Error connecting to the database: %v\n", err)
+			fmt.Printf("Error connecting to the database: %v\n", err)
+			os.Exit(1)
 		}
 		defer conn.Close(ctx)
 
-		passwordHash, err := crypt.GeneratePassword([]byte(createPassword))
+		passwordHash, err := auth.GeneratePassword([]byte(createPassword))
 		if err != nil {
-			log.Fatalf("Error: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
 		}
 
 		queries := dbx.New(conn)
@@ -38,10 +41,11 @@ var cmdCreateUser = &cobra.Command{
 			LastName:       createLastName,
 		})
 		if err != nil {
-			log.Fatalf("Error: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
 		}
 
-		log.Printf("User created!: %v\n", user.Email)
+		fmt.Printf("User created!: %v\n", user.Email)
 	},
 }
 

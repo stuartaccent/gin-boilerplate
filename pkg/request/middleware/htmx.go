@@ -1,54 +1,58 @@
-package htmx
+package middleware
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-// Helper contains utilities for dealing with HTMX requests
-type Helper struct {
+// HTMXHelper contains utilities for dealing with HTMX requests
+type HTMXHelper struct {
 	Request  *http.Request
 	Response http.ResponseWriter
 }
 
-// New creates a new HTMX helper.
-func New(req *http.Request, res http.ResponseWriter) *Helper {
-	return &Helper{
-		Request:  req,
-		Response: res,
-	}
-}
-
 // IsHTMXRequest checks if the request is an HTMX request.
-func (h *Helper) IsHTMXRequest() bool {
+func (h *HTMXHelper) IsHTMXRequest() bool {
 	return h.Request.Header.Get("HX-Request") == "true"
 }
 
 // SetRedirect sets the `HX-Redirect` header for HTMX requests.
-func (h *Helper) SetRedirect(url string) {
+func (h *HTMXHelper) SetRedirect(url string) {
 	h.Response.Header().Set("HX-Redirect", url)
 }
 
 // SetPushUrl sets the `HX-Push-Url` header for HTMX requests.
-func (h *Helper) SetPushUrl(url string) {
+func (h *HTMXHelper) SetPushUrl(url string) {
 	h.Response.Header().Set("HX-Push-Url", url)
 }
 
 // SetRefresh sets the `HX-Refresh` header for HTMX requests.
-func (h *Helper) SetRefresh() {
+func (h *HTMXHelper) SetRefresh() {
 	h.Response.Header().Set("HX-Refresh", "true")
 }
 
 // SetTrigger sets the `HX-Trigger` header for HTMX requests.
-func (h *Helper) SetTrigger(content string) {
+func (h *HTMXHelper) SetTrigger(content string) {
 	h.Response.Header().Set("HX-Trigger", content)
 }
 
 // SetTriggerAfterSettle sets the `HX-Trigger-After-Settle` header for HTMX requests.
-func (h *Helper) SetTriggerAfterSettle(content string) {
+func (h *HTMXHelper) SetTriggerAfterSettle(content string) {
 	h.Response.Header().Set("HX-Trigger-After-Settle", content)
 }
 
 // SetTriggerAfterSwap sets the `HX-Trigger-After-Swap` header for HTMX requests.
-func (h *Helper) SetTriggerAfterSwap(content string) {
+func (h *HTMXHelper) SetTriggerAfterSwap(content string) {
 	h.Response.Header().Set("HX-Trigger-After-Swap", content)
+}
+
+// HTMX middleware func to set the HTMX helper.
+func HTMX() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set("htmx", &HTMXHelper{
+			Request:  c.Request,
+			Response: c.Writer,
+		})
+		c.Next()
+	}
 }

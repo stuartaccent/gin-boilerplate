@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gin.go.dev/internal/middleware"
-	"gin.go.dev/internal/renderer"
-	"gin.go.dev/internal/routing"
+	"gin.go.dev/pkg/auth"
+	"gin.go.dev/pkg/home"
+	"gin.go.dev/pkg/request/middleware"
+	"gin.go.dev/pkg/response"
+	"gin.go.dev/pkg/static"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -110,11 +112,11 @@ func runServer() {
 		middleware.HTMX(),
 	)
 
-	engine.HTMLRender = &renderer.HTMLRenderer{Fallback: engine.HTMLRender}
+	engine.HTMLRender = &response.HTMLRenderer{Fallback: engine.HTMLRender}
 
-	routing.NewStaticRouter(engine)
-	routing.NewMainRouter(engine)
-	routing.NewAuthRouter(engine, csrfMiddleware)
+	static.Router(engine)
+	home.Router(engine)
+	auth.Router(engine, csrfMiddleware)
 
 	server := http.Server{
 		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),

@@ -1,9 +1,9 @@
 # Gin Boilerplate
 
-* Manage the database schema and apply migrations in `db/migrations`.
-* Manage the queries in `db/sqlc`.
-* Generated query directory `db/dbx`.
-* Manage the templates in `ui`.
+* Manage the database schema and apply migrations in `pkg/storage/db/migrations`.
+* Manage the queries in `pkg/storage/db/sqlc`.
+* Generated query directory `pkg/storage/db/dbx`.
+* Manage the templates in `pkg/ui`.
 
 ## Tooling
 for migrations:
@@ -41,7 +41,7 @@ sqlc generate
 
 new, requires `golang-migrate` cli to be installed:
 ```bash
-migrate create -ext sql -dir db/migrations \
+migrate create -ext sql -dir pkg/storage/db/migrations \
 -seq <do_something>
 ```
 
@@ -99,9 +99,6 @@ docker run \
 --env "DATABASE_HOST=host.docker.internal" \
 --env "SERVER_MODE=release" \
 --env "SERVER_PORT=80" \
---log-driver=fluentd \
---log-opt fluentd-address=localhost:24224 \
---log-opt tag=docker.gin.boilerplate \
 gin-boilerplate:latest \
 server --config config.toml
 ```

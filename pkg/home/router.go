@@ -1,14 +1,14 @@
-package routing
+package home
 
 import (
-	"gin.go.dev/internal/middleware"
-	"gin.go.dev/ui/pages"
+	"gin.go.dev/pkg/request/middleware"
+	"gin.go.dev/pkg/ui/pages"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-// NewMainRouter create a new MainRouter.
-func NewMainRouter(e *gin.Engine) {
+// Router create a new Router.
+func Router(e *gin.Engine) {
 	auth := middleware.Authenticated()
 	g := e.Group("/", auth)
 	{

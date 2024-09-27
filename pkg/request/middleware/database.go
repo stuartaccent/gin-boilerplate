@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"gin.go.dev/db/dbx"
+	"gin.go.dev/pkg/storage/db/dbx"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

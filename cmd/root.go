@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"gin.go.dev/internal/config"
+	"gin.go.dev/pkg/config"
 	"github.com/spf13/cobra"
-	"log"
+	"os"
 	"runtime"
 )
 
@@ -42,12 +42,14 @@ func initConfig() {
 	}
 
 	if cfgErr != nil {
-		log.Fatalf("Can't read config: %v\n", cfgErr)
+		fmt.Printf("Can't read config: %v\n", cfgErr)
+		os.Exit(1)
 	}
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatalf("%v\n", err)
+		fmt.Printf("%v\n", err)
+		os.Exit(1)
 	}
 }

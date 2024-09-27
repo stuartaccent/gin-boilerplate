@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"context"
-	"log"
-
-	"gin.go.dev/db/dbx"
-	"gin.go.dev/internal/crypt"
+	"fmt"
+	"gin.go.dev/pkg/auth"
+	"gin.go.dev/pkg/storage/db/dbx"
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var (
@@ -22,13 +22,15 @@ var cmdSetPassword = &cobra.Command{
 
 		conn, err := pgx.Connect(ctx, cfg.Database.URL().String())
 		if err != nil {
-			log.Fatalf("Error connecting to the database: %v\n", err)
+			fmt.Printf("Error connecting to the database: %v\n", err)
+			os.Exit(1)
 		}
 		defer conn.Close(ctx)
 
-		hashed, err := crypt.GeneratePassword([]byte(setPWPassword))
+		hashed, err := auth.GeneratePassword([]byte(setPWPassword))
 		if err != nil {
-			log.Fatalf("Error: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
 		}
 
 		queries := dbx.New(conn)
@@ -36,10 +38,11 @@ var cmdSetPassword = &cobra.Command{
 			Email:          setPWEmail,
 			HashedPassword: hashed,
 		}); err != nil {
-			log.Fatalf("Error: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
 		}
 
-		log.Printf("Password set for user: %v\n", setPWEmail)
+		fmt.Printf("Password set for user: %v\n", setPWEmail)
 	},
 }
 

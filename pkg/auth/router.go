@@ -1,13 +1,11 @@
-package routing
+package auth
 
 import (
 	"encoding/gob"
-	"gin.go.dev/db/dbx"
-	"gin.go.dev/internal/crypt"
-	"gin.go.dev/internal/htmx"
-	"gin.go.dev/internal/middleware"
-	"gin.go.dev/ui/components"
-	"gin.go.dev/ui/pages"
+	"gin.go.dev/pkg/request/middleware"
+	"gin.go.dev/pkg/storage/db/dbx"
+	"gin.go.dev/pkg/ui/components"
+	"gin.go.dev/pkg/ui/pages"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
@@ -28,8 +26,8 @@ type LoginCredentials struct {
 	Password string `form:"password" binding:"required,min=6"`
 }
 
-// NewAuthRouter create a new AuthRouter.
-func NewAuthRouter(e *gin.Engine, csrf gin.HandlerFunc) {
+// Router create a new Router.
+func Router(e *gin.Engine, csrf gin.HandlerFunc) {
 	limiter := middleware.RateLimiter(rate.Limit(2), 5)
 	typeForm := middleware.ContentTypes("application/x-www-form-urlencoded")
 	auth := middleware.Authenticated()
@@ -54,7 +52,7 @@ func loginForm(c *gin.Context) {
 // login the user from the login form then redirect to home
 func login(c *gin.Context) {
 	ctx := c.Request.Context()
-	hx := c.MustGet("htmx").(*htmx.Helper)
+	hx := c.MustGet("htmx").(*middleware.HTMXHelper)
 	queries := c.MustGet("queries").(*dbx.Queries)
 	session := sessions.Default(c)
 
@@ -79,7 +77,7 @@ func login(c *gin.Context) {
 	}
 
 	password := []byte(credentials.Password)
-	if !crypt.CheckPassword(user.HashedPassword, password) {
+	if !CheckPassword(user.HashedPassword, password) {
 		invalid()
 		return
 	}
