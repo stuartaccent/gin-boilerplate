@@ -2,8 +2,8 @@ package auth
 
 import (
 	"encoding/gob"
-	"gin.go.dev/pkg/request/middleware"
 	"gin.go.dev/pkg/storage/db/dbx"
+	"gin.go.dev/pkg/transport/middleware"
 	"gin.go.dev/pkg/ui/components"
 	"gin.go.dev/pkg/ui/pages"
 	"github.com/gin-contrib/sessions"

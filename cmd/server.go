@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"gin.go.dev/pkg/auth"
 	"gin.go.dev/pkg/home"
-	"gin.go.dev/pkg/request/middleware"
-	"gin.go.dev/pkg/response"
 	"gin.go.dev/pkg/static"
+	"gin.go.dev/pkg/transport/html"
+	"gin.go.dev/pkg/transport/middleware"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -112,7 +112,7 @@ func runServer() {
 		middleware.HTMX(),
 	)
 
-	engine.HTMLRender = &response.HTMLRenderer{Fallback: engine.HTMLRender}
+	engine.HTMLRender = &html.Render{Fallback: engine.HTMLRender}
 
 	static.Router(engine)
 	home.Router(engine)

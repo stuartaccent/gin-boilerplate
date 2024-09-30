@@ -1,7 +1,7 @@
 package home
 
 import (
-	"gin.go.dev/pkg/request/middleware"
+	"gin.go.dev/pkg/transport/middleware"
 	"gin.go.dev/pkg/ui/pages"
 	"github.com/gin-gonic/gin"
 	"net/http"
