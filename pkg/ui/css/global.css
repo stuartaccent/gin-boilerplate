@@ -6,7 +6,7 @@
 
 @layer components {
     .owl-h1 {
-        @apply text-3xl font-extrabold tracking-tight;
+        @apply text-3xl font-semibold tracking-tight;
     }
     .owl-h2 {
         @apply text-2xl font-semibold tracking-tight;
