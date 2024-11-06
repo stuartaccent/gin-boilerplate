@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* typography */
+
+@layer components {
+    .owl-h1 {
+        @apply text-3xl font-extrabold tracking-tight;
+    }
+    .owl-h2 {
+        @apply text-2xl font-semibold tracking-tight;
+    }
+    .owl-h3 {
+        @apply text-xl font-semibold tracking-tight;
+    }
+    .owl-h4 {
+        @apply text-lg font-semibold tracking-tight;
+    }
+    .owl-p {
+        @apply leading-7 [&:not(:first-child)]:mt-6;
+    }
+}
+
+/* forms */
+
+@layer components {
+    .owl-form-field {
+        @apply space-y-2;
+    }
+    .owl-form-field-error {
+        @apply text-sm text-red-500;
+    }
+    .owl-form-field-description {
+        @apply text-sm text-gray-500;
+    }
+    .owl-form-field:has(.owl-form-field-error) {
+        .owl-label {
+            @apply text-red-500;
+        }
+        .owl-input, .owl-select, .owl-textarea, .owl-checkbox {
+            @apply border-red-500;
+        }
+    }
+    .owl-input {
+        @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium;
+    }
+    .owl-select {
+        @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm;
+    }
+    .owl-textarea {
+        @apply flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm;
+    }
+    .owl-checkbox {
+        @apply h-4 w-4 shrink-0 rounded-sm border accent-black;
+    }
+    .owl-label {
+        @apply text-sm font-medium leading-none;
+    }
+}
+
+/* buttons */
+
+@layer components {
+    .owl-button {
+        @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md h-10 px-4 py-2 text-sm font-medium bg-black text-white hover:bg-black/80;
+    }
+    .owl-button-icon {
+        @apply size-10 p-0;
+    }
+    .owl-button-secondary {
+        @apply bg-gray-100 text-black hover:bg-gray-100/80;
+    }
+    .owl-button-destructive {
+        @apply bg-red-500 text-white hover:bg-red-500/90;
+    }
+    .owl-button-outline {
+        @apply bg-transparent text-black border hover:bg-gray-100/80;
+    }
+    .owl-button-ghost {
+        @apply bg-transparent text-black hover:bg-gray-100/80;
+    }
+    .owl-button-link {
+        @apply bg-transparent text-black hover:bg-transparent hover:underline hover:underline-offset-4;
+    }
+}
+
+/* dropdown menus */
+
+@layer components {
+    .owl-dropdown-menu {
+        @apply relative inline-flex;
+    }
+    .owl-dropdown-menu-content {
+        @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md w-56 absolute top-11;
+    }
+    .owl-dropdown-menu-content:not(.owl-open) {
+        @apply hidden;
+    }
+    .owl-dropdown-menu-label {
+        @apply px-2 py-1.5 text-sm font-semibold;
+    }
+    .owl-dropdown-menu-separator {
+        @apply -mx-1 my-1 h-px bg-gray-200;
+    }
+    .owl-dropdown-menu-item {
+        @apply w-full relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100 cursor-pointer;
+    }
+}

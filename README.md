@@ -82,6 +82,23 @@ go run . createuser --config config.dev.toml \
 --lastname User
 ```
 
+## Tailwind
+
+download the cli to the tmp folder (created once air is run):
+```bash 
+curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64
+chmod +x tailwindcss-macos-arm64
+mv tailwindcss-macos-arm64 tmp/tailwindcss
+```
+build and watch:
+```bash
+./tmp/tailwindcss \
+-i ./pkg/ui/css/global.css \
+-o ./pkg/static/public/css/global.css \
+--watch \
+--minify
+```
+
 ## Docker
 This can be used to build the app as a binary and run it in a container.
 
@@ -118,36 +135,14 @@ docker run \
 postgres:latest
 ```
 
-## Load Testing
+## Links
 
-Just a basic test with wrk, no real load testing was done. Logging was disabled for the test.
-
-logged in with real user and session cookie, postgres db on localhost:
-```bash
-wrk -c 400 -t 10 -d 30s -H "Cookie: session=..." http://localhost
-```
-
-    Running 30s test @ http://localhost
-        10 threads and 400 connections
-        Thread Stats   Avg      Stdev     Max   +/- Stdev
-          Latency    20.20ms    2.00ms  71.96ms   88.29%
-          Req/Sec     1.99k   144.93     2.24k    85.63%
-        593341 requests in 30.02s, 796.16MB read
-        Socket errors: connect 0, read 402, write 0, timeout 0
-    Requests/sec:  19763.59
-    Transfer/sec:     26.52MB
-
-not logged in:
-```bash
-wrk -c 400 -t 10 -d 30s http://localhost/auth/login
-```
-
-    Running 30s test @ http://localhost/auth/login
-        10 threads and 400 connections
-        Thread Stats   Avg      Stdev     Max   +/- Stdev
-          Latency     5.40ms    3.32ms  86.58ms   84.56%
-          Req/Sec     7.68k   645.82    16.49k    89.63%
-        2294661 requests in 30.04s, 4.52GB read
-        Socket errors: connect 0, read 406, write 0, timeout 0
-    Requests/sec:  76392.72
-    Transfer/sec:    154.23MB
+* [Boilerplate](https://github.com/stuartaccent/gin-boilerplate)
+* [Golang](https://go.dev)
+* [Templ](https://templ.guide)
+* [Air](https://github.com/air-verse/air)
+* [Icônes](https://icones.js.org/collection/lucide)
+* [Tailwind](https://tailwindcss.com)
+* [Owl](https://github.com/AccentDesign/owl)
+* [Shadcn](https://ui.shadcn.com/docs)
+* [Htmx](https://htmx.org/)
