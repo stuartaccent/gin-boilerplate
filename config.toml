@@ -1,6 +1,6 @@
 [server]
 port = 80
-mode = "debug"  # "release", "debug", "test"
+mode = "release"  # "release", "debug", "test"
 
 [database]
 host = "localhost"
