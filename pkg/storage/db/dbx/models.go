@@ -9,13 +9,13 @@ import (
 )
 
 type AuthUser struct {
-	ID             pgtype.UUID        `json:"id"`
-	Email          string             `json:"email"`
-	HashedPassword []byte             `json:"-"`
-	FirstName      string             `json:"first_name"`
-	LastName       string             `json:"last_name"`
-	IsActive       bool               `json:"is_active"`
-	IsVerified     bool               `json:"is_verified"`
-	CreatedAt      pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
+	ID             pgtype.UUID
+	Email          string
+	HashedPassword []byte
+	FirstName      string
+	LastName       string
+	IsActive       bool
+	IsVerified     bool
+	CreatedAt      pgtype.Timestamptz
+	UpdatedAt      pgtype.Timestamptz
 }

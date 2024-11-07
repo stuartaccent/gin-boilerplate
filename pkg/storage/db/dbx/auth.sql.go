@@ -18,10 +18,10 @@ RETURNING id, email, hashed_password, first_name, last_name, is_active, is_verif
 `
 
 type CreateUserParams struct {
-	Email          string `json:"email"`
-	HashedPassword []byte `json:"-"`
-	FirstName      string `json:"first_name"`
-	LastName       string `json:"last_name"`
+	Email          string
+	HashedPassword []byte
+	FirstName      string
+	LastName       string
 }
 
 // create a new user
@@ -99,17 +99,17 @@ func (q *Queries) GetUserByID(ctx context.Context, id pgtype.UUID) (AuthUser, er
 
 const setUserPasswordByEmail = `-- name: SetUserPasswordByEmail :exec
 UPDATE auth_users
-SET hashed_password = $1
-WHERE email = $2
+SET hashed_password = $2
+WHERE email = $1
 `
 
 type SetUserPasswordByEmailParams struct {
-	HashedPassword []byte `json:"-"`
-	Email          string `json:"email"`
+	Email          string
+	HashedPassword []byte
 }
 
 // set a user's password
 func (q *Queries) SetUserPasswordByEmail(ctx context.Context, arg SetUserPasswordByEmailParams) error {
-	_, err := q.db.Exec(ctx, setUserPasswordByEmail, arg.HashedPassword, arg.Email)
+	_, err := q.db.Exec(ctx, setUserPasswordByEmail, arg.Email, arg.HashedPassword)
 	return err
 }
