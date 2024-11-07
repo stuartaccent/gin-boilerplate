@@ -31,7 +31,12 @@ For configuration see the `config.toml` passed in as the `--config` flag to app.
 > 
 > "Could you generate random hex keys of 32 bytes and 16 bytes for me?"
 
-## SQL Helpers
+create your dev config:
+```bash
+cp config.toml config.dev.toml
+```
+
+## SQL
 make sure to use the correct db dsn in `sqlc.yml` and that the db is fully migrated.
 ```bash
 sqlc generate
@@ -120,9 +125,7 @@ gin-boilerplate:latest \
 server --config config.toml
 ```
 
-## Postgres Container
-
-create the container:
+if you need it create a postgres container for the database:
 ```bash
 docker run \
 --detach \
@@ -145,4 +148,5 @@ postgres:latest
 * [Tailwind](https://tailwindcss.com)
 * [Owl](https://github.com/AccentDesign/owl)
 * [Shadcn](https://ui.shadcn.com/docs)
-* [Htmx](https://htmx.org/)
+* [Htmx](https://htmx.org)
+* [Writing secure Go code](https://jarosz.dev/article/writing-secure-go-code)
