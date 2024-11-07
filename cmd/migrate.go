@@ -74,8 +74,7 @@ func migrateDatabase(migrateFunc func(*migrate.Migrate) error) error {
 		return err
 	}
 
-	err = conn.Ping()
-	if err != nil {
+	if err = conn.Ping(); err != nil {
 		return err
 	}
 
