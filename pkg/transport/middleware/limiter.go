@@ -11,8 +11,6 @@ import (
 type ipLimiter struct {
 	ips map[string]*rate.Limiter
 	mu  sync.RWMutex
-	r   rate.Limit
-	b   int
 }
 
 // newIPLimiter creates a new IP-based rate limiter

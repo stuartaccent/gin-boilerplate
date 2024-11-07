@@ -85,6 +85,10 @@ func migrateDatabase(migrateFunc func(*migrate.Migrate) error) error {
 	}
 
 	fs, err := iofs.New(db.Migrations, "migrations")
+	if err != nil {
+		return err
+	}
+
 	migrator, err := migrate.NewWithInstance("iofs", fs, "postgres", driver)
 	if err != nil {
 		return err
