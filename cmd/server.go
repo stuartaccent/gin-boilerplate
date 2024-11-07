@@ -119,8 +119,9 @@ func runServer() {
 	auth.Router(engine, csrfMiddleware)
 
 	server := http.Server{
-		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
-		Handler: engine,
+		Addr:              fmt.Sprintf(":%d", cfg.Server.Port),
+		ReadHeaderTimeout: 10 * time.Second,
+		Handler:           engine,
 	}
 
 	log.Printf("Starting server on port %d", cfg.Server.Port)
