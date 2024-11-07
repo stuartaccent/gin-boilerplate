@@ -104,6 +104,6 @@
         @apply -mx-1 my-1 h-px bg-gray-200;
     }
     .owl-dropdown-menu-item {
-        @apply w-full relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100 cursor-pointer;
+        @apply w-full relative flex select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100;
     }
 }
