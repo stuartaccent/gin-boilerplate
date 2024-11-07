@@ -2,25 +2,25 @@ package components
 
 import "gin.go.dev/pkg/ui/icons"
 
-templ UserMenuClosed() {
-  <div id="user-menu" class="owl-dropdown-menu">
-    <button class="owl-button owl-button-ghost" hx-get="/auth/user-menu?open" hx-swap="outerHTML" hx-target="#user-menu">
-      <span>My Account</span>
-      @icons.ChevronDown("size-4")
-    </button>
-  </div>
-}
-
-templ UserMenuOpen() {
-  <div id="user-menu" class="owl-dropdown-menu">
-    <button class="owl-button owl-button-ghost" hx-get="/auth/user-menu" hx-swap="outerHTML" hx-target="#user-menu" hx-trigger="click from:body, load delay:5s">
-      <span>My Account</span>
-      @icons.ChevronDown("size-4")
-    </button>
-    <div class={ "owl-dropdown-menu-content", "owl-open", "right-0" } role="menu">
-      <div class="owl-dropdown-menu-label">My Account</div>
-      <div class="owl-dropdown-menu-separator" role="separator"></div>
-      <a class="owl-dropdown-menu-item" role="menuitem" href="/auth/logout">Logout</a>
+templ UserMenu(opened bool) {
+    <div class="owl-dropdown-menu" hx-target="this" hx-swap="outerHTML">
+        <button class="owl-button owl-button-ghost"
+            if opened {
+                hx-get="/auth/user-menu"
+                hx-trigger="click from:body, load delay:5s"
+            } else {
+                hx-get="/auth/user-menu?open"
+            }
+        >
+            <span>My Account</span>
+            @icons.ChevronDown("size-4")
+        </button>
+        <div class={ "owl-dropdown-menu-content", templ.KV("owl-open", opened), "right-0" } role="menu">
+            if opened {
+                <div class="owl-dropdown-menu-label">My Account</div>
+                <div class="owl-dropdown-menu-separator" role="separator"></div>
+                <a href="/auth/logout" class="owl-dropdown-menu-item" role="menuitem">Logout</a>
+            }
+        </div>
     </div>
-  </div>
 }

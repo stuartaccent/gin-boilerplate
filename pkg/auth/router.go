@@ -104,9 +104,6 @@ func logout(c *gin.Context) {
 
 // userMenu the user menu in the header.
 func userMenu(c *gin.Context) {
-	if _, open := c.GetQuery("open"); open {
-		c.HTML(http.StatusOK, "", components.UserMenuOpen())
-	} else {
-		c.HTML(http.StatusOK, "", components.UserMenuClosed())
-	}
+	_, open := c.GetQuery("open")
+	c.HTML(http.StatusOK, "", components.UserMenu(open))
 }
