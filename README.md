@@ -5,22 +5,18 @@
 * Generated query directory `pkg/storage/db/dbx`.
 * Manage the templates in `pkg/ui`.
 
-## Tooling
-for migrations:
+## Go Tasks
+install go [task](https://taskfile.dev) package to run commands defined in [Taskfile.yml](Taskfile.yml):
 ```bash
-go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+go install github.com/go-task/task/v3/cmd/task@latest
 ```
-for sqlc:
+then install all dev tooling:
 ```bash
-go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+task setup:tooling
 ```
-for template rendering:
+list all tasks:
 ```bash
-go install github.com/a-h/templ/cmd/templ@latest
-```
-for air reloading:
-```bash
-go install github.com/air-verse/air@latest
+task --list-all
 ```
 
 ## Config
@@ -33,42 +29,49 @@ For configuration see the `config.toml` passed in as the `--config` flag to app.
 
 create your dev config:
 ```bash
-cp config.toml config.dev.toml
+task setup:config
 ```
 
 ## SQL
 make sure to use the correct db dsn in `sqlc.yml` and that the db is fully migrated.
+
+generate go code from sql:
 ```bash
-sqlc generate
+task gen:sqlc
 ```
 
 ## Migrations
 
-new, requires `golang-migrate` cli to be installed:
+new:
 ```bash
-migrate create -ext sql -dir pkg/storage/db/migrations \
--seq <do_something>
+task migrate:add SEQ="migration_name"
 ```
 
 up:
 ```bash
-go run . migrate --config config.dev.toml up
+task migrate:up
 ```
 
 down:
 ```bash
-go run . migrate --config config.dev.toml down
+task migrate:down
 ```
 
 ## Templates
 
 Generate template code with [templ.guide](https://templ.guide)
 ```bash
-templ generate
+task gen:templ
 ```
 
 ## Usage
 
+use air to generate the templates and run the server:
+```bash
+air
+```
+
+list app commands:
 ```bash
 go run . help
 ```
@@ -89,6 +92,8 @@ go run . createuser --config config.dev.toml \
 
 ## Tailwind
 
+For simplicity we are using the [standalone cli](https://tailwindcss.com/blog/standalone-cli).
+
 download the cli to the tmp folder (created once air is run):
 ```bash 
 curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64
@@ -97,11 +102,7 @@ mv tailwindcss-macos-arm64 tmp/tailwindcss
 ```
 build and watch:
 ```bash
-./tmp/tailwindcss \
--i ./pkg/ui/css/global.css \
--o ./pkg/static/public/css/global.css \
---watch \
---minify
+task gen:tailwind
 ```
 
 ## Docker
@@ -142,6 +143,7 @@ postgres:latest
 
 * [Boilerplate](https://github.com/stuartaccent/gin-boilerplate)
 * [Golang](https://go.dev)
+* [Task](https://taskfile.dev)
 * [Templ](https://templ.guide)
 * [Air](https://github.com/air-verse/air)
 * [Icônes](https://icones.js.org/collection/lucide)
