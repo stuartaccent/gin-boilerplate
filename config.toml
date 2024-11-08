@@ -17,7 +17,7 @@ sts_include_subdomains = true
 frame_deny = true
 content_type_nosniff = true
 browser_xss_filter = true
-content_security_policy = "default-src 'self'"
+content_security_policy = "default-src 'self'; script-src 'self'; object-src 'self'"
 csrf_secret = "some_secret_key"
 
 [session]
