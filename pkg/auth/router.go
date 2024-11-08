@@ -42,7 +42,7 @@ func Router(e *gin.Engine, csrf gin.HandlerFunc) {
 
 // loginForm get the login form
 func loginForm(c *gin.Context) {
-	session := sessions.Default(c)
+	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
 	c.HTML(http.StatusOK, "", pages.Login(pages.LoginData{
 		Csrf: csrf.GetToken(c),
@@ -52,9 +52,9 @@ func loginForm(c *gin.Context) {
 // login the user from the login form then redirect to home
 func login(c *gin.Context) {
 	ctx := c.Request.Context()
-	hx := c.MustGet("htmx").(*middleware.HTMXHelper)
+	hx := c.MustGet("htmx").(*middleware.HTMX)
 	queries := c.MustGet("queries").(*dbx.Queries)
-	session := sessions.Default(c)
+	session := c.MustGet("session").(sessions.Session)
 
 	invalid := func() {
 		c.HTML(http.StatusUnprocessableEntity, "", pages.Login(pages.LoginData{
@@ -95,7 +95,7 @@ func login(c *gin.Context) {
 
 // logout the user then redirect to login
 func logout(c *gin.Context) {
-	session := sessions.Default(c)
+	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
 	session.Options(sessions.Options{MaxAge: -1})
 	_ = session.Save()

@@ -99,6 +99,7 @@ func runServer() {
 		HttpOnly: cfg.Session.HttpOnly,
 		SameSite: cfg.Session.SameSite,
 	})
+	sessionMiddleware := sessions.Sessions("session", sessionStore)
 
 	engine := gin.New()
 
@@ -107,9 +108,8 @@ func runServer() {
 	engine.Use(
 		gin.Recovery(),
 		secureMiddleware,
-		sessions.Sessions("session", sessionStore),
-		middleware.Database(dbPool),
-		middleware.HTMX(),
+		sessionMiddleware,
+		middleware.Context(dbPool),
 	)
 
 	engine.HTMLRender = &html.Render{Fallback: engine.HTMLRender}

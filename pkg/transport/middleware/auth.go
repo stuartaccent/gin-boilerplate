@@ -11,15 +11,14 @@ import (
 )
 
 // Authenticated middleware func to ensure logged in, redirects to log-in if not.
-// This calls CurrentUser first, so you don't need to chain both.
 func Authenticated() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if _, exists := c.Get("user"); !exists {
-			CurrentUser()(c)
+			currentUser()(c)
 		}
 
 		if _, exists := c.Get("user"); !exists {
-			hx := c.MustGet("htmx").(*HTMXHelper)
+			hx := c.MustGet("htmx").(*HTMX)
 			if hx.IsHTMXRequest() {
 				hx.SetRedirect("/auth/login")
 				c.Status(http.StatusNoContent)
@@ -31,10 +30,11 @@ func Authenticated() gin.HandlerFunc {
 	}
 }
 
-// CurrentUser middleware func to set the current active user.
-func CurrentUser() gin.HandlerFunc {
+// currentUser middleware func to set the current active user.
+func currentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		session := sessions.Default(c)
+		ctx := c.Request.Context()
+		session := c.MustGet("session").(sessions.Session)
 		queries := c.MustGet("queries").(*dbx.Queries)
 
 		userID, ok := session.Get("user_id").([16]byte)
@@ -42,8 +42,7 @@ func CurrentUser() gin.HandlerFunc {
 			return
 		}
 
-		userUUID := pgtype.UUID{Bytes: userID, Valid: true}
-		user, err := queries.GetUserByID(c.Request.Context(), userUUID)
+		user, err := queries.GetUserByID(ctx, pgtype.UUID{Bytes: userID, Valid: true})
 		if err != nil || !user.IsActive {
 			return
 		}
