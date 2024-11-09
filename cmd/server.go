@@ -9,6 +9,7 @@ import (
 	"gin.go.dev/pkg/static"
 	"gin.go.dev/pkg/transport/html"
 	"gin.go.dev/pkg/transport/middleware"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -101,6 +102,8 @@ func runServer() {
 	})
 	sessionMiddleware := sessions.Sessions("session", sessionStore)
 
+	gzipMiddleware := gzip.Gzip(gzip.DefaultCompression)
+
 	engine := gin.New()
 
 	initLogging(engine)
@@ -109,6 +112,7 @@ func runServer() {
 		gin.Recovery(),
 		secureMiddleware,
 		sessionMiddleware,
+		gzipMiddleware,
 		middleware.Context(dbPool),
 	)
 
