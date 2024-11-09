@@ -35,7 +35,7 @@ func Base(l Layout) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"htmx-config\" content=\"{&#34;includeIndicatorStyles&#34;:false}\"><meta name=\"description\" content=\"Boilerplate site build with golang\"><title>Gin Boilerplate - ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"htmx-config\" content=\"{&#34;includeIndicatorStyles&#34;:false}\"><meta name=\"description\" content=\"A no-fuss, Golang-powered boilerplate site built with Gin for quick-as-a-whip loading and dressed up with Tailwind CSS for a clean, modern look. Built right for folks who want speed, simplicity, and style without all the extra fiddle-faddle.\"><title>Gin Boilerplate - ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
