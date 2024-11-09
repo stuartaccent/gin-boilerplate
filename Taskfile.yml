@@ -2,16 +2,18 @@ version: '3'
 
 vars:
   CONFIG: config.dev.toml
-  MIGRATIONS: ./pkg/storage/db/migrations
-  CSS_IN: ./pkg/ui/css/global.css
-  CSS_OUT: ./pkg/static/public/css/global.css
+  MIGRATIONS: pkg/storage/db/migrations
+  CSS_IN: pkg/ui/css/global.css
+  CSS_OUT: pkg/static/public/css/global.css
 
 tasks:
   setup:config:
+    desc: "Copy the base config.toml to the development config file."
     cmds:
       - cp config.toml {{.CONFIG}}
 
   setup:tooling:
+    desc: "Install necessary Go tools and dependencies."
     cmds:
       - go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
@@ -23,39 +25,72 @@ tasks:
       - go install github.com/securego/gosec/v2/cmd/gosec@latest
 
   gen:sqlc:
+    desc: "Generate Go code from SQL queries using sqlc."
     cmds:
       - sqlc generate
 
   gen:templ:
+    desc: "Generate code from templates using templ."
     cmds:
       - templ generate
 
   gen:tailwind:
+    desc: "Process CSS files with Tailwind CSS in watch mode with minification."
     cmds:
       - ./tmp/tailwindcss -i {{.CSS_IN}} -o {{.CSS_OUT}} --watch --minify
 
   migrate:add:
+    desc: "Create a new database migration file."
     vars:
       SEQ: '{{default "initial" .SEQ}}'
     cmds:
       - migrate create -ext sql -dir {{.MIGRATIONS}} -seq "{{.SEQ}}"
 
   migrate:up:
+    desc: "Apply all migrations to the database."
     cmds:
       - go run . migrate --config {{.CONFIG}} up
 
   migrate:down:
+    desc: "Revert all migrations to the database."
     cmds:
       - go run . migrate --config {{.CONFIG}} down
 
   dev:fmt:
+    desc: "Format Go code according to the standard Go style."
     cmds:
       - gofmt -l -w .
 
-  dev:lint:
+  dev:vet:
+    desc: "Examine Go source code and report suspicious constructs."
     cmds:
       - go vet ./...
+
+  dev:static:
+    desc: "Perform advanced static analysis using staticcheck."
+    cmds:
       - staticcheck ./...
+
+  dev:lintci:
+    desc: "Run golangci-lint to execute multiple linters."
+    cmds:
       - golangci-lint run ./...
-      - govulncheck
+
+  dev:vuln:
+    desc: "Scan for known vulnerabilities in dependencies using govulncheck."
+    cmds:
+      - govulncheck ./...
+
+  dev:sec:
+    desc: "Check for common security issues with gosec."
+    cmds:
       - gosec ./...
+
+  dev:lint:
+    desc: "Run all linting and security analysis tools."
+    deps:
+      - dev:vet
+      - dev:static
+      - dev:lintci
+      - dev:vuln
+      - dev:sec
