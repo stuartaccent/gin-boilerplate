@@ -13,10 +13,11 @@ templ Base(l Layout) {
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="htmx-config" content='{"includeIndicatorStyles":false}'/>
+    <meta name="description" content="Boilerplate site build with golang">
     <title>Gin Boilerplate - { l.Title }</title>
     <link rel="stylesheet" href="/static/css/global.css"/>
-    <script src="/static/js/htmx.min.js"></script>
-    <script src="/static/js/main.js"></script>
+    <script src="/static/js/htmx.min.js" defer></script>
+    <script src="/static/js/main.js" defer></script>
   </head>
   <body class={ "antialiased", l.BodyClass }>
     if l.ShowHeader {
