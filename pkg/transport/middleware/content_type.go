@@ -3,23 +3,23 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
-// ContentTypes blocks requests with invalid Content-Type headers.
-func ContentTypes(allowedTypes ...string) gin.HandlerFunc {
+// AllowContentType enforces a whitelist of request Content-Types otherwise responds
+// with a 415 Unsupported Media Type status.
+func AllowContentType(contentTypes ...string) gin.HandlerFunc {
+	allowedContentTypes := make(map[string]struct{}, len(contentTypes))
+	for _, c := range contentTypes {
+		allowedContentTypes[strings.TrimSpace(strings.ToLower(c))] = struct{}{}
+	}
+
 	return func(c *gin.Context) {
-		valid := false
-		for _, v := range allowedTypes {
-			if c.GetHeader("Content-Type") == v {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			c.AbortWithStatus(http.StatusUnsupportedMediaType)
+		s := strings.ToLower(strings.TrimSpace(c.ContentType()))
+		if _, ok := allowedContentTypes[s]; ok {
+			c.Next()
 			return
 		}
-
-		c.Next()
+		c.AbortWithStatus(http.StatusUnsupportedMediaType)
 	}
 }

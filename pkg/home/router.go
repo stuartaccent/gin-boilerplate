@@ -10,9 +10,9 @@ import (
 // Router create a new Router.
 func Router(e *gin.Engine) {
 	auth := middleware.Authenticated()
-	g := e.Group("/", auth)
+	g := e.Group("", auth)
 	{
-		g.GET("/", index)
+		g.GET("", index)
 	}
 }
 

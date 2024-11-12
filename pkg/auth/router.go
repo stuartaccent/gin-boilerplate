@@ -8,10 +8,8 @@ import (
 	"gin.go.dev/pkg/ui/pages"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	sloggin "github.com/samber/slog-gin"
 	csrf "github.com/stuartaccent/gin-csrf"
 	"golang.org/x/time/rate"
-	"log/slog"
 	"net/http"
 	"strings"
 )
@@ -29,12 +27,12 @@ type LoginCredentials struct {
 // Router create a new Router.
 func Router(e *gin.Engine, csrf gin.HandlerFunc) {
 	limiter := middleware.RateLimiter(rate.Limit(2), 5)
-	typeForm := middleware.ContentTypes("application/x-www-form-urlencoded")
+	allowForm := middleware.AllowContentType("application/x-www-form-urlencoded")
 	auth := middleware.Authenticated()
 	g := e.Group("/auth")
 	{
 		g.GET("/login", csrf, loginForm)
-		g.POST("/login", limiter, typeForm, csrf, login)
+		g.POST("/login", limiter, allowForm, csrf, login)
 		g.GET("/logout", logout)
 		g.GET("/user-menu", auth, userMenu)
 	}
@@ -84,7 +82,7 @@ func login(c *gin.Context) {
 
 	session.Set("user_id", user.ID.Bytes)
 	if err = session.Save(); err != nil {
-		sloggin.AddCustomAttributes(c, slog.String("error", err.Error()))
+		_ = c.Error(err)
 		invalid()
 		return
 	}
@@ -98,7 +96,9 @@ func logout(c *gin.Context) {
 	session := c.MustGet("session").(sessions.Session)
 	session.Clear()
 	session.Options(sessions.Options{MaxAge: -1})
-	_ = session.Save()
+	if err := session.Save(); err != nil {
+		_ = c.Error(err)
+	}
 	c.Redirect(http.StatusFound, "/auth/login")
 }
 
