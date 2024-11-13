@@ -88,9 +88,9 @@ tasks:
 
   dev:lint:
     desc: "Run all linting and security analysis tools."
-    deps:
-      - dev:vet
-      - dev:static
-      - dev:lintci
-      - dev:vuln
-      - dev:sec
+    cmds:
+      - task: dev:vet
+      - task: dev:static
+      - task: dev:lintci
+      - task: dev:vuln
+      - task: dev:sec
