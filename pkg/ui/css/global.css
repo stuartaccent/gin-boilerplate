@@ -25,6 +25,24 @@
 /* forms */
 
 @layer components {
+    .owl-label {
+        @apply text-sm font-medium leading-none;
+    }
+    .owl-input, .owl-select, .owl-textarea {
+        @apply flex w-full rounded-md border px-3 py-2 text-sm;
+    }
+    .owl-input {
+        @apply h-10 file:border-0 file:bg-transparent file:text-sm file:font-medium;
+    }
+    .owl-select {
+        @apply h-10;
+    }
+    .owl-textarea {
+        @apply min-h-[80px];
+    }
+    .owl-checkbox {
+        @apply size-4 shrink-0 rounded-sm border accent-black;
+    }
     .owl-form-field {
         @apply space-y-2;
     }
@@ -41,21 +59,6 @@
         .owl-input, .owl-select, .owl-textarea, .owl-checkbox {
             @apply border-red-500;
         }
-    }
-    .owl-input {
-        @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium;
-    }
-    .owl-select {
-        @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm;
-    }
-    .owl-textarea {
-        @apply flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm;
-    }
-    .owl-checkbox {
-        @apply h-4 w-4 shrink-0 rounded-sm border accent-black;
-    }
-    .owl-label {
-        @apply text-sm font-medium leading-none;
     }
 }
 
