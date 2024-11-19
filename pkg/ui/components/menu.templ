@@ -3,24 +3,25 @@ package components
 import "gin.go.dev/pkg/ui/icons"
 
 templ UserMenu(opened bool) {
-    <div class="owl-dropdown-menu" hx-target="this" hx-swap="outerHTML">
-        <button class="owl-button owl-button-ghost"
-            if opened {
-                hx-get="/auth/user-menu"
-                hx-trigger="click from:body, load delay:5s"
-            } else {
-                hx-get="/auth/user-menu?open"
-            }
-        >
-            <span>My Account</span>
-            @icons.ChevronDown("size-4")
-        </button>
-        <div class={ "owl-dropdown-menu-content", templ.KV("owl-open", opened), "right-0" } role="menu">
-            if opened {
-                <div class="owl-dropdown-menu-label">My Account</div>
-                <div class="owl-dropdown-menu-separator" role="separator"></div>
-                <a href="/auth/logout" class="owl-dropdown-menu-item" role="menuitem">Logout</a>
-            }
-        </div>
-    </div>
+	<div class="owl-dropdown-menu" hx-target="this" hx-swap="outerHTML">
+		<button
+			class="owl-button owl-button-ghost"
+			if opened {
+				hx-get="/auth/user-menu"
+				hx-trigger="click from:body, load delay:5s"
+			} else {
+				hx-get="/auth/user-menu?open"
+			}
+		>
+			<span>My Account</span>
+			@icons.ChevronDown("size-4")
+		</button>
+		<div class={ "owl-dropdown-menu-content", templ.KV("owl-open", opened), "right-0" } role="menu">
+			if opened {
+				<div class="owl-dropdown-menu-label">My Account</div>
+				<div class="owl-dropdown-menu-separator" role="separator"></div>
+				<a href="/auth/logout" class="owl-dropdown-menu-item" role="menuitem">Logout</a>
+			}
+		</div>
+	</div>
 }

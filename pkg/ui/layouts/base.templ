@@ -1,34 +1,34 @@
 package layouts
 
 type Layout struct {
-  Title       string
-  ShowHeader  bool
-  BodyClass   string
+	Title      string
+	ShowHeader bool
+	BodyClass  string
 }
 
 templ Base(l Layout) {
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="htmx-config" content='{"includeIndicatorStyles":false}'/>
-    <meta name="description" content="A no-fuss, Golang-powered boilerplate site built with Gin for quick-as-a-whip loading and dressed up with Tailwind CSS for a clean, modern look. Built right for folks who want speed, simplicity, and style without all the extra fiddle-faddle.">
-    <title>Gin Boilerplate - { l.Title }</title>
-    <link rel="stylesheet" href="/static/css/global.css"/>
-    <script src="/static/js/htmx.min.js" defer></script>
-    <script src="/static/js/main.js" defer></script>
-  </head>
-  <body class={ "antialiased", l.BodyClass }>
-    if l.ShowHeader {
-      <header>
-        <div class="container mx-auto flex p-5 items-center">
-          <div class="owl-h3 mr-auto"><a href="/">Gin Boilerplate</a></div>
-          <div hx-get="/auth/user-menu" hx-swap="outerHTML" hx-trigger="load"></div>
-        </div>
-      </header>
-    }
-    { children... }
-  </body>
-  </html>
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="htmx-config" content='{"includeIndicatorStyles":false}'/>
+			<meta name="description" content="A no-fuss, Golang-powered boilerplate site built with Gin for quick-as-a-whip loading and dressed up with Tailwind CSS for a clean, modern look. Built right for folks who want speed, simplicity, and style without all the extra fiddle-faddle."/>
+			<title>Gin Boilerplate - { l.Title }</title>
+			<link rel="stylesheet" href="/static/css/global.css"/>
+			<script src="/static/js/htmx.min.js" defer></script>
+			<script src="/static/js/main.js" defer></script>
+		</head>
+		<body class={ "antialiased", l.BodyClass }>
+			if l.ShowHeader {
+				<header>
+					<div class="container mx-auto flex p-5 items-center">
+						<div class="owl-h3 mr-auto"><a href="/">Gin Boilerplate</a></div>
+						<div hx-get="/auth/user-menu" hx-swap="outerHTML" hx-trigger="load"></div>
+					</div>
+				</header>
+			}
+			{ children... }
+		</body>
+	</html>
 }

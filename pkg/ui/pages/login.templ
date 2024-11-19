@@ -3,37 +3,37 @@ package pages
 import "gin.go.dev/pkg/ui/layouts"
 
 type LoginData struct {
-  Error string
-  Csrf  string
+	Error string
+	Csrf  string
 }
 
 var loginLayout = layouts.Layout{
-  Title:      "Login",
-  ShowHeader: false,
-  BodyClass:  "p-4",
+	Title:      "Login",
+	ShowHeader: false,
+	BodyClass:  "p-4",
 }
 
 templ Login(d LoginData) {
-  @layouts.Base(loginLayout) {
-    <div class="min-h-screen flex flex-col items-center justify-center">
-      <div class="w-[350px] grid gap-10">
-        <h1 class="owl-h2">{ loginLayout.Title }</h1>
-        <form id="form" class="grid gap-6" method="post" hx-post="/auth/login" hx-select="#form" hx-swap="outerHTML">
-          <input type="hidden" name="_csrf" value={ d.Csrf }/>
-          <div class="owl-form-field">
-            <label class="owl-label" for="email">Email address</label>
-            <input class="owl-input" id="email" type="email" name="email" required />
-          </div>
-          <div class="owl-form-field">
-            <label class="owl-label" for="password">Password</label>
-            <input class="owl-input" id="password" type="password" name="password" required />
-            if d.Error != "" {
-              <div class="owl-form-field-error">{ d.Error }</div>
-            }
-          </div>
-          <button class="owl-button" type="submit">Login</button>
-        </form>
-      </div>
-    </div>
-  }
+	@layouts.Base(loginLayout) {
+		<div class="min-h-screen flex flex-col items-center justify-center">
+			<div class="w-[350px] grid gap-10">
+				<h1 class="owl-h2">{ loginLayout.Title }</h1>
+				<form id="form" class="grid gap-6" method="post" hx-post="/auth/login" hx-select="#form" hx-swap="outerHTML">
+					<input type="hidden" name="_csrf" value={ d.Csrf }/>
+					<div class="owl-form-field">
+						<label class="owl-label" for="email">Email address</label>
+						<input class="owl-input" id="email" type="email" name="email" required/>
+					</div>
+					<div class="owl-form-field">
+						<label class="owl-label" for="password">Password</label>
+						<input class="owl-input" id="password" type="password" name="password" required/>
+						if d.Error != "" {
+							<div class="owl-form-field-error">{ d.Error }</div>
+						}
+					</div>
+					<button class="owl-button" type="submit">Login</button>
+				</form>
+			</div>
+		</div>
+	}
 }

@@ -59,6 +59,7 @@ tasks:
   dev:fmt:
     desc: "Format Go code according to the standard Go style."
     cmds:
+      - templ fmt .
       - gofmt -l -w .
 
   dev:vet:
